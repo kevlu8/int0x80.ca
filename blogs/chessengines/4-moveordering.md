@@ -110,7 +110,14 @@ if (score >= beta) {
 Without the history heuristic, we explore `220419` nodes to reach depth 6, and with the history heuristic, we explore `130657` nodes.
 
 ```
-[add SPRT results when available]
+--------------------------------------------------
+Results of pz-history vs pz-killer (8+0.08, 1t, 16MB, 8moves_v3.pgn):
+Elo: 24.24 +/- 14.58, nElo: 29.85 +/- 17.88
+LOS: 99.95 %, DrawRatio: 44.83 %, PairsRatio: 1.40
+Games: 1450, Wins: 644, Losses: 543, Draws: 263, Points: 775.5 (53.48 %)
+Ptnml(0-2): [77, 90, 325, 121, 112], WL/DD Ratio: 11.50
+LLR: 2.96 (100.4%) (-2.94, 2.94) [0.00, 10.00]
+--------------------------------------------------
 ```
 
 ## Putting It All Together
@@ -127,7 +134,7 @@ fastvector<std::pair<Move, Value>> assign_values(fastvector<Move> moves, Board& 
 		} else {
 			if (m == killer[0][ply]) score += 1500;
 			else if (m == killer[1][ply]) score += 1000; // Add a bonus for killer moves
-			score = history[pos.side_to_move()][m.from][m.to]; // Use history heuristic for quiet moves
+			score += history[pos.side_to_move()][m.from][m.to]; // Use history heuristic for quiet moves
 		}
 		scored_moves.push_back({m, score});
 	}

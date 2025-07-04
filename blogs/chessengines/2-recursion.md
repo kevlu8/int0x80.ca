@@ -58,6 +58,7 @@ Value negamax(Board& pos, int depth, int side = 1) {
 		if (score <= -MATING) score++; // This is very important!
 		// If we find a checkmate, we want the engine to prefer faster mates.
 		// By subtracting 1 from a winning score, we ensure that the engine prefers mates in fewer moves (or tries to survive as long as possible).
+		// The MATING constant is usually set to MATE - MAX_DEPTH, where MATE is a large constant like 30000.
 
 		if (score > best) {
 			best = score; // Update the best score if we found a better one
@@ -97,6 +98,9 @@ std::pair<Move, Value> search(Board &board, int64_t time) {
 		if (time_elapsed >= time) {
 			break;
 		}
+		
+		cur_move = best_move;
+		cur_eval = best;
 	}
 
 	return { cur_move, cur_eval };

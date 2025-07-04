@@ -106,7 +106,14 @@ if (entry && entry->depth >= depth) {
 This is known as transposition table cutoffs.
 
 ```
-[sprt results]
+--------------------------------------------------
+Results of pz-tt-cutoff vs pz-qs-mvv (8+0.08, 1t, 16MB, 8moves_v3.pgn):
+Elo: 54.25 +/- 22.98, nElo: 67.15 +/- 27.94
+LOS: 100.00 %, DrawRatio: 31.65 %, PairsRatio: 1.86
+Games: 594, Wins: 253, Losses: 161, Draws: 180, Points: 343.0 (57.74 %)
+Ptnml(0-2): [19, 52, 94, 82, 50], WL/DD Ratio: 3.09
+LLR: 2.95 (100.1%) (-2.94, 2.94) [0.00, 10.00]
+--------------------------------------------------
 ```
 
 ## Move Ordering
@@ -133,5 +140,12 @@ fastvector<std::pair<Move, Value>> assign_values(fastvector<Move> moves, Board& 
 ```
 
 ```
-[sprt results]
+--------------------------------------------------
+Results of pz-tt-move vs pz-tt-cutoff (8+0.08, 1t, 16MB, 8moves_v3.pgn):
+Elo: 79.58 +/- 27.59, nElo: 99.22 +/- 33.15
+LOS: 100.00 %, DrawRatio: 37.91 %, PairsRatio: 3.09
+Games: 422, Wins: 202, Losses: 107, Draws: 113, Points: 258.5 (61.26 %)
+Ptnml(0-2): [15, 17, 80, 56, 43], WL/DD Ratio: 3.00
+LLR: 2.96 (100.6%) (-2.94, 2.94) [0.00, 10.00]
+--------------------------------------------------
 ```
