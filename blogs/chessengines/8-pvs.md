@@ -62,3 +62,12 @@ LLR: 2.97 (100.9%) (-2.94, 2.94) [0.00, 10.00]
 Removing the `score < beta` condition:
 
 ```
+--------------------------------------------------
+Results of pz-no-beta-condition vs pz-pvs (8+0.08, 1t, 16MB, 8moves_v3.pgn):
+Elo: 29.99 +/- 15.61, nElo: 42.36 +/- 21.93
+LOS: 99.99 %, DrawRatio: 38.38 %, PairsRatio: 1.50
+Games: 964, Wins: 307, Losses: 224, Draws: 433, Points: 523.5 (54.30 %)
+Ptnml(0-2): [21, 98, 185, 133, 45], WL/DD Ratio: 0.83
+LLR: 2.95 (100.0%) (-2.94, 2.94) [0.00, 10.00]
+--------------------------------------------------
+```

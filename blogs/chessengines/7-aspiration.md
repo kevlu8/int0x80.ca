@@ -7,6 +7,8 @@ Most of the time, our evaluation of a position will not change by too much betwe
 
 However, if our search falls outside of this window, we will have to re-search the position with a larger window. While this may seem inefficient, this doesn't happen too often, and the speedup from using smaller windows is worth it.
 
+Customizing the size of the window on which we search will be a common theme in the future! So, make sure that you roughly understand how alpha-beta works.
+
 ```cpp
 Value lo = -VALUE_INFINITE, hi = VALUE_INFINITE;
 int lwindow_sz = ASPIRATION_SIZE, hwindow_sz = ASPIRATION_SIZE;
