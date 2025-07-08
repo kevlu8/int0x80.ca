@@ -11,7 +11,7 @@ Customizing the size of the window on which we search will be a common theme in 
 
 ```cpp
 Value lo = -VALUE_INFINITE, hi = VALUE_INFINITE;
-int lwindow_sz = ASPIRATION_SIZE, hwindow_sz = ASPIRATION_SIZE;
+int lwindow_sz = ASPIRATION_SIZE, hwindow_sz = ASPIRATION_SIZE; // My aspiration size is set to 50, but feel free to mess around and try different values!
 if (cur_eval != -VALUE_INFINITE) {
 	// Aspiration windows 
 	lo = cur_eval - lwindow_sz;

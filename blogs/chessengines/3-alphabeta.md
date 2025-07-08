@@ -49,7 +49,7 @@ Value negamax(Board& pos, int depth, Value alpha = -INF, Value beta = INF) {
 }
 ```
 
-Alpha-beta pruning results in a speedup of around sqrt(N) compared to normal negamax. Plus, it's lossless, meaning that it will always find the same best move as normal negamax.
+Alpha-beta pruning results in a speedup of around sqrt(N) compared to normal negamax (in the best case). Plus, it's lossless, meaning that it will always find the same best move as normal negamax.
 
 ```
 --------------------------------------------------

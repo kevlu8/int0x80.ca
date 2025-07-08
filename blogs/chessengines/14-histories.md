@@ -13,5 +13,33 @@ Then, we can use the capture history to replace LVA in our move ordering functio
 Value score = PieceValue[pos.piece_on(m.to)] + capture_history[pos.piece_on(m.from)][pos.piece_on(m.to)][m.to];
 ```
 
+Why does this work better than LVA? Mainly because LVA is a static evaluation, and doesn't change based on the position at all, whereas capture history will change depending on cutoffs previously obtained.
+
 ## Counter Move History
+
+Often, a move played by one side can be refuted by a move played by the other side, even if the aforementioned move is played at different depths. When this happens, the refuting move usually doesn't change too much. So, we can keep track of the refuting move and give it a bonus in the move ordering function.
+
+```cpp
+Move counter_history[2][64][64]; // [color][from][to]
+
+...
+
+if (m == counter_history[pos.side_to_move()][prev_move.from][prev_move.to]) {
+	score += 1000; // CMH bonus
+}
+```
+
+When a move fails high (beta cutoff), we store it in the counter move history table, indexed by the previous move.
+
+```cpp
+if (!m.is_capture()) {
+	counter_history[pos.side_to_move()][prev_move.from][prev_move.to] = m;
+}
+```
+
+Again, note that this is only for non-capture moves. Capture moves are handled by other heuristics (MVV-LVA, capture history, etc.).
+
+How you get the previous move depends on your search implementation, but I suggest creating a `SearchState` struct that contains the move and static evaluation of previous positions. (The eval will come in useful later! Hint: improving heuristic)
+
+
 

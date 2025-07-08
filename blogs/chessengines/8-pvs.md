@@ -40,7 +40,7 @@ The safest formula is $reduction(i, d) = 0.77 + log(i) \times log(d) / 2.36$, wh
 
 ```cpp
 score = -negamax(board, depth - reduction[i][d], -side, ply + 1, -alpha - 1, -alpha);
-if (score > alpha && score < beta) {
+if (score > alpha) {
 	// Move wasn't as bad as we thought, do a full search
 	score = -negamax(board, depth - 1, -side, ply + 1, -beta, -alpha);
 }

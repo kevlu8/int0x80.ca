@@ -66,7 +66,7 @@ So, our new quiescence search function looks like this:
 
 ```cpp
 Value quiescence(Board& pos, int side, Value alpha = -INF, Value beta = INF) {
-	Value stand_pat = eval(pos) * side;
+	Value stand_pat = eval(pos) * side; // eval returns a white-relative score
 
 	if (stand_pat >= beta) {
 		return stand_pat; // Opponent won't let this happen
@@ -77,8 +77,6 @@ Value quiescence(Board& pos, int side, Value alpha = -INF, Value beta = INF) {
 
 	for (Move m : pos.legal_moves()) {
 		if (is_capture(m) || is_promotion(m)) {
-			is_stable = false; // If we have a capture or promotion, the position is not stable
-
 			pos.make_move(m);
 			Value score = -quiescence(pos, -side, -beta, -alpha);
 			pos.undo_move(m);

@@ -37,7 +37,7 @@ We use a hash table to store the results of previous searches. The key is the ha
 
 ```cpp
 struct TTEntry {
-	Value score; // The score of the position
+	Value eval; // The score of the position
 	int depth; // The depth at which the score was found
 	Move best_move; // The best move found in this position
 	uint8_t flag; // The type of entry (exact, lower bound, upper bound) so we don't use cutoff scores as exact scores
@@ -131,7 +131,7 @@ fastvector<std::pair<Move, Value>> assign_values(fastvector<Move> moves, Board& 
 		} else {
 			if (m == killer[0][ply]) score += 1500;
 			else if (m == killer[1][ply]) score += 1000; // Add a bonus for killer moves
-			score = history[pos.side_to_move()][m.from][m.to]; // Use history heuristic for quiet moves
+			score += history[pos.side_to_move()][m.from][m.to]; // Use history heuristic for quiet moves
 		}
 		scored_moves.push_back({m, score});
 	}

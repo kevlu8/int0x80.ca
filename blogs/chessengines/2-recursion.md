@@ -21,6 +21,8 @@ However, BFS is not very useful for chess engines, mainly due to its high memory
 
 But, a game of chess is not *just* a tree. And, if we were to simply use a traversal algorithm, we quickly run into a problem: there are *way too many* chess positions to search all of them. If we only stop when the game ends, we would have to search through an insane amount of positions.
 
+Just as an example, how many possible positions do you think can result after only 5 moves? The answer is 69 quadrillion. And yet, modern engines can search over 20 moves ahead in a matter of seconds. Stick through this series to find out how they do it!
+
 Chess engines use evaluation functions to solve this problem. Instead of searching all the way to the end, we search to a certain depth, then *evaluate* the position, or make an educated guess about which side is more likely to win.
 
 As previously mentioned, I won't go too deep into evaluation functions. But, they are a crucial part of chess engines. The more accurate the evaluation function, the better the engine will perform. For now, I'll assume you have an evaluation function that is good enough.

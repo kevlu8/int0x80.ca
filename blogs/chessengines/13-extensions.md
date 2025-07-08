@@ -23,3 +23,18 @@ Games | N: 850 W: 263 L: 128 D: 459
 Penta | [3, 66, 188, 129, 39]
 ```
 https://sscg13.pythonanywhere.com/test/430/
+
+## Internal Iterative Reductions
+
+Okay, I know, the title of the post is "extensions", but this is a very useful technique that I wanted to include here. In general, the current meta is to focus less on extensions, but rather on reductions. Internal iterative reductions are a simple way to do this.
+
+When we reach a position, we either have a transposition table entry or we don't. If we don't, we assume that the position isn't a good position, and we reduce the depth.
+
+```cpp
+if (depth > 5 && !tt_entry) {
+	depth -= 2;
+}
+```
+
+Again, the provided numbers are completely arbitrary, and you can adjust them to your liking. The idea is that if we don't have a transposition table entry, the position is likely not very good, so we can reduce the depth.
+
