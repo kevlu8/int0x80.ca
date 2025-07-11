@@ -41,5 +41,12 @@ Again, note that this is only for non-capture moves. Capture moves are handled b
 
 How you get the previous move depends on your search implementation, but I suggest creating a `SearchState` struct that contains the move and static evaluation of previous positions. (The eval will come in useful later! Hint: improving heuristic)
 
-
+```
+Elo   | 2.65 +- 2.11 (95%)
+SPRT  | 8.0+0.08s Threads=1 Hash=32MB
+LLR   | 2.95 (-2.94, 2.94) [0.00, 5.00]
+Games | N: 39456 W: 8332 L: 8031 D: 23093
+Penta | [702, 4492, 9074, 4723, 737]
+```
+https://sscg13.pythonanywhere.com/test/447/
 
