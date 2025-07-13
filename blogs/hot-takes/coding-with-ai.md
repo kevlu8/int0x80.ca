@@ -33,7 +33,7 @@ While there is an argument to be made that vibecoding allows for people who woul
 
 Take, as an example, a project I'm currently participating in - Hack Club's "Summer of Making". This project is focused on encouraging young people to learn about technology and code their own projects. Unfortunately, the site itself is a prime example of vibecoding gone wrong. It's slow, unresponsive, and the site itself just feels very sketchy.
 
-This is not to say that the Summer of Making is a bad initiative - it definitely isn't. But, I frankly have to question why people who couldn't be bothered to code their website from scratch are the ones teaching others to code.
+This is not to say that the Summer of Making is a bad initiative - it definitely isn't. But, I frankly have to question why people who couldn't be bothered to code their website from scratch are the ones encouraging others to code.
 
 Furthermore, vibecoding can lead to disastrous consequences when it comes to security. There have been several instances where people have used AI tools to build applications that have several vulnerabilities, **even leaking API keys**.
 
