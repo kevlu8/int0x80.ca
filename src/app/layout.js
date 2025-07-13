@@ -23,6 +23,8 @@ export default function RootLayout({ children }) {
     <html lang="en">
 	  <head>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+		<meta property="og:title" content="int0x80.ca" />
+		<meta property="og:description" content="A personal devlog and portfolio site" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}

@@ -1,0 +1,13 @@
+User-agent: GPTBot # OpenAI's crawler
+Disallow: /
+
+User-agent: CCBot # Common Crawl Bot
+Disallow: /
+
+User-agent: Google-Extended # Google's AI training crawler
+Disallow: /
+
+User-agent: ClaudeBot # Anthropic's crawler
+Disallow: /
+
+# You guys should go and do something useful instead of stealing others' content.
