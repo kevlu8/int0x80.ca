@@ -1,3 +1,9 @@
+---
+title: "12 - Time Management"
+slug: timeman
+description: "Using time effectively"
+---
+
 # Time Management
 ### 2025-07-05
 

@@ -1,3 +1,9 @@
+---
+title: "3 - Alpha-Beta Pruning"
+slug: alphabeta
+description: "The key optimization in chess engines!"
+---
+
 # Alpha-Beta Pruning
 ### 2025-07-03
 

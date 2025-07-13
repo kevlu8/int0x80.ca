@@ -1,3 +1,9 @@
+---
+title: "13 - Extensions"
+slug: extensions
+description: "Searching certain positions deeper"
+---
+
 # Extensions
 ### 2025-07-05
 

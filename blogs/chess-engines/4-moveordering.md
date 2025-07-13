@@ -1,3 +1,9 @@
+---
+title: "4 - Move Ordering"
+slug: moveordering
+description: "Reaching maximum speed-up with alpha-beta search"
+---
+
 # Move Ordering
 ### 2025-07-03
 

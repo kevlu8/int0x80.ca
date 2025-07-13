@@ -1,3 +1,9 @@
+---
+title: "14 - Other Histories"
+slug: histories
+description: "Using historical results to improve search"
+---
+
 # Other Histories
 ### 2025-07-05
 
@@ -49,4 +55,3 @@ Games | N: 39456 W: 8332 L: 8031 D: 23093
 Penta | [702, 4492, 9074, 4723, 737]
 ```
 https://sscg13.pythonanywhere.com/test/447/
-

@@ -24,3 +24,60 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+article h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+article h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.75rem;
+}
+
+article h3 { /* Usually used for the dates on blogs */
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: gray;
+}
+
+article h4 { /* Only used for clarifications / notes */
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+  color: gray;
+}
+
+article p {
+  margin-bottom: 1rem;
+}
+
+article ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+}
+
+article a {
+  color: #4286f4;
+}
+
+article a:hover {
+  text-decoration: underline;
+}
+
+article table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+
+article table th,
+article table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+article table tr {
+  border-bottom: 1px solid #ddd;
+}

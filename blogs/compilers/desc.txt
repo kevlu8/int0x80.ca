@@ -1,0 +1,1 @@
+Read about compilers and their quirks, especially in the context of how they can be exploited in competitive programming.

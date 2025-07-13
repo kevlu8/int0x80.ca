@@ -1,3 +1,9 @@
+---
+title: "6 - Transposition Tables"
+slug: ttables
+description: "Reusing previous search results"
+---
+
 # Transposition Tables
 ### 2025-07-03
 

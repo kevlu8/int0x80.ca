@@ -1,3 +1,9 @@
+---
+title: "1 - Intro"
+slug: introduction
+description: "An introduction to my chess engine development series!"
+---
+
 # Chess Engine Development
 ### 2025-07-03
 

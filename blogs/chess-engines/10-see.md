@@ -1,3 +1,9 @@
+---
+title: "10 - Static Exchange Evaluation"
+slug: see
+description: "Ignoring bad captures"
+---
+
 # Static Exchange Evaluation
 ### 2025-07-04
 

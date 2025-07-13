@@ -1,3 +1,9 @@
+---
+title: "GCC Optimization Pragmas Lie to You"
+slug: gcc-optim-pragmas
+description: "GCC optimization pragmas do not behave the same as command-line arguments. Why is this?"
+---
+
 # GCC Optimization Pragmas Lie to You
 ### 2024-09-22
 
@@ -61,3 +67,5 @@ Most of the time, there is no reason to use `#pragma GCC optimize("O3")` over `-
 So, what have we learned? When using `#pragma` to optimize, make sure that the majority of your code is located within your file, and that you're using less standard library functions. Only then will the optimization pragma be fully useful. 
 
 Thanks for reading my first blog post! I hope you enjoyed!
+
+#### Originally published on [CodeForces](https://codeforces.com/blog/entry/134286).

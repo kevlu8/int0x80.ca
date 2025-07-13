@@ -1,3 +1,9 @@
+---
+title: "2 - Recursion"
+slug: recursion
+description: "An introduction to negamax in chess engines."
+---
+
 # Recursion
 ### 2025-07-03
 

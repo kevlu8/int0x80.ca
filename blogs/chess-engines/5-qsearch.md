@@ -1,3 +1,9 @@
+---
+title: "5 - Quiescence Search"
+slug: qsearch
+description: "Avoiding the horizon effect"
+---
+
 # Quiescence Search
 ### 2025-07-03
 

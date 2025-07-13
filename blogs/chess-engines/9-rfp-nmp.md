@@ -1,3 +1,9 @@
+---
+title: "9 - Reverse Futility Pruning and Null Move Pruning"
+slug: rfp-nmp
+description: "Lossy yet effective pruning techniques"
+---
+
 # Reverse Futility Pruning and Null Move Pruning
 ### 2025-07-04
 

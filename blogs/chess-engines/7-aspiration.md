@@ -1,3 +1,9 @@
+---
+title: "7 - Aspiration Windows"
+slug: aspiration
+description: "Narrowing the window of possible evaluations"
+---
+
 # Aspiration Windows
 ### 2025-07-04
 
