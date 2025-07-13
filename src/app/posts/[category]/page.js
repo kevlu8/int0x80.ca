@@ -11,7 +11,7 @@ export default async function CategoryPage({ params }) {
   const posts = getPostsByCategory(awaitparams.category);
 
   return (
-    <div className="font-mono min-h-screen py-8">
+    <div className="font-mono min-h-[calc(100vh-4rem-4rem)] py-8">
       <h1 className="flex justify-center text-2xl">{awaitparams.category.replace('-', ' ').toUpperCase()}</h1>
       <ul className="grid gap-8 md:grid-cols-2 max-w-4xl mx-auto mt-8">
         {posts.map(({ slug, data }) => (

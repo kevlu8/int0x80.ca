@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export default function PostsHome() {
   return (
-    <div className="min-h-screen py-8">
+    <div className="min-h-[calc(100vh-4rem-4rem)] py-8">
       <h1 className="text-center font-mono text-3xl mb-12">Projects</h1>
       
       <div className="max-w-4xl mx-auto">
