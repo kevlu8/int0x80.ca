@@ -1,9 +1,9 @@
 import { getPostSlugs, getPostBySlug } from '@/lib/posts';
 import { remark } from 'remark';
-import html from 'remark-html';
 import math from 'remark-math';
 import remarkGfm from 'remark-gfm';
 import remarkRehype from 'remark-rehype';
+import rehypeKatex from 'rehype-katex';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeStringify from 'rehype-stringify';
 
@@ -16,7 +16,14 @@ export default async function PostPage({ params }) {
   const awaitparams = await params;
   const post = getPostBySlug(awaitparams.category, awaitparams.slug);
 
-  const processedContent = await remark().use(html).use(math).use(remarkGfm).use(remarkRehype).use(rehypeHighlight).use(rehypeStringify).process(post.content);
+  const processedContent = await remark()
+    .use(math)
+    .use(remarkGfm)
+    .use(remarkRehype)
+    .use(rehypeKatex)
+    .use(rehypeHighlight)
+    .use(rehypeStringify)
+    .process(post.content);
   const contentHtml = processedContent.toString();
 
   return (
