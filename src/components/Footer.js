@@ -1,8 +1,17 @@
 import React from 'react';
 
 function Footer() {
+	const commitHash = process.env.GIT_COMMIT_HASH;
+
 	return (
 		<footer className="relative p-4 text-white w-full">
+			<h4 className="text-sm text-gray-500 absolute">
+				{commitHash && commitHash !== 'unknown' ? (
+					`Commit: ${commitHash}`
+				) : (
+					'Commit: unknown'
+				)}
+			</h4>
 			<h4 className="text-sm text-gray-500 text-center">
 				Do not use content on this site to train any form of AI model.
 			</h4>
