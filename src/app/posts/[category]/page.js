@@ -17,9 +17,9 @@ export default async function CategoryPage({ params }) {
         {posts.map(({ slug, data }) => (
           <li key={slug}>
             <Link href={`/posts/${awaitparams.category}/${slug}`}>
-				<div className="border border-gray-300 dark:border-gray-700 rounded-lg p-6 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors cursor-pointer">
+				<div className="border border-gray-700 rounded-lg p-6 hover:bg-gray-900 transition-colors cursor-pointer">
 					<h2 className="text-xl mb-3 text-foreground">{data.title}</h2>
-					<p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+					<p className="text-sm text-gray-400 leading-relaxed">
 						{data.description}
 					</p>
 				</div>
