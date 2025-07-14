@@ -17,9 +17,9 @@ Well, maybe they were just stunned by the sheer brilliance of our project, right
 
 Unfortunately, this is not an isolated incident. And it's not just computer science.
 
-Another couple of years ago, I was in a debate tournament. The motion was: "This House Believes That we should prioritize women's sports". Since this was the Canadian National format and my partner and I were proposition, we were able to define both "This House" and "prioritize". We defined "prioritize women's sports" as "to provide more publicity to women's sports, but not necessarily overshadowing men's sports".
+Another couple of years ago, I was in a debate tournament. The motion was: "This House Believes That we should prioritize women's sports". Since this was the Canadian National format and my partner and I were proposition, we were able to define both "This House" and "prioritize". We defined "prioritize women's sports" as "to provide more publicity to women's sports, while not overshadowing men's sports".
 
-The opposition's entire argument was based on how prioritizing women's sports would cause men's sports to lose funding, and how this would be unfair.
+The opposition's entire argument was based on how prioritizing women's sports would overshadow men's sports and cause it to lose funding, and how this would be unfair.
 
 Both my partner and I were pretty confused, but we just thought to ourselves, "Well, that's an easy win."
 
@@ -31,7 +31,7 @@ The issue in this case is that the judges were parents - they hadn't done debate
 
 ## The point
 
-I was definitely disappointed in these two situations, but they are ultimately parent of a bigger problem.
+I was definitely disappointed in these two situations, but they are ultimately part of a bigger problem.
 
 While wanting to create opportunities for people to showcase their work is great, it is necessary that the judges know what they are judging. Otherwise, it's just a waste of everyone's time.
 
