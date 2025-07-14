@@ -81,3 +81,13 @@ article table td {
 article table tr {
   border-bottom: 1px solid #ddd;
 }
+
+article code:not(pre code) {
+  background-color: #2a2a2a;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+article pre {
+  padding-bottom: 1rem;
+}
