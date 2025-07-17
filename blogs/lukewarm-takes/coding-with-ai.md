@@ -2,6 +2,7 @@
 title: Coding with AI
 slug: coding-with-ai
 description: "To what extent are AI coding tools helpful?"
+date: 2025-07-12
 ---
 
 # Coding with AI

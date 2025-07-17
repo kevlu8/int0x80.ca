@@ -2,6 +2,7 @@
 title: "6 - Transposition Tables"
 slug: ttables
 description: "Reusing previous search results"
+date: 2025-07-03
 ---
 
 # Transposition Tables

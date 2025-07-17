@@ -2,6 +2,7 @@
 title: Competitive Programming Doesn't Make You a Better Developer
 slug: compprogram
 description: "Exploring the flaws of the technical interview"
+date: 2025-07-16
 ---
 
 # Competitive Programming Doesn't Make You a Better Developer

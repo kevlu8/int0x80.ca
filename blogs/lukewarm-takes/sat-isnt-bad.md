@@ -2,6 +2,7 @@
 title: The SAT Isn't That Bad
 slug: sat-isnt-bad
 description: "The SAT is actually a decent test of readiness for college"
+date: 2025-07-16
 ---
 
 # The SAT Isn't That Bad

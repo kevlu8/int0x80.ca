@@ -2,6 +2,7 @@
 title: "4 - Move Ordering"
 slug: moveordering
 description: "Reaching maximum speed-up with alpha-beta search"
+date: 2025-07-03
 ---
 
 # Move Ordering

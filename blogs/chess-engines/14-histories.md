@@ -2,6 +2,7 @@
 title: "14 - Other Histories"
 slug: histories
 description: "Using historical results to improve search"
+date: 2025-07-05
 ---
 
 # Other Histories

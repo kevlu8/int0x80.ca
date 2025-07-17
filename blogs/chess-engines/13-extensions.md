@@ -2,6 +2,7 @@
 title: "13 - Extensions"
 slug: extensions
 description: "Searching certain positions deeper"
+date: 2025-07-05
 ---
 
 # Extensions

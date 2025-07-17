@@ -2,6 +2,7 @@
 title: The USACO Is Unenjoyable
 slug: usaco-is-unenjoyable
 description: "The USACO is arguably less fun than other countries' olympiads"
+date: 2025-07-16
 ---
 
 # The USACO Is Unenjoyable

@@ -16,12 +16,29 @@ export function getPostSlugs() {
       }
     });
   });
-  // sort slugs by the number at the beginning
+  
+  // Custom sorting: numbered files by number, others by date (newest first)
   slugs.sort((a, b) => {
-	const numA = parseInt(a.slug.split('-')[0], 10);
-	const numB = parseInt(b.slug.split('-')[0], 10);
-	return numA - numB;
+    const numA = parseInt(a.slug.split('-')[0], 10);
+    const numB = parseInt(b.slug.split('-')[0], 10);
+    
+    // If both have numbers at the beginning, sort by number
+    if (!isNaN(numA) && !isNaN(numB)) {
+      return numA - numB;
+    }
+    
+    // If only one has a number, numbered files come first
+    if (!isNaN(numA) && isNaN(numB)) return -1;
+    if (isNaN(numA) && !isNaN(numB)) return 1;
+    
+    // If neither has a number, sort by date (newest first)
+    const postA = getPostBySlug(a.category, a.slug);
+    const postB = getPostBySlug(b.category, b.slug);
+    const dateA = new Date(postA.data.date);
+    const dateB = new Date(postB.data.date);
+    return dateB - dateA;
   });
+  
   return slugs;
 }
 
@@ -52,7 +69,20 @@ export function getPostsByCategory(category) {
 	.sort((a, b) => {
 	  const numA = parseInt(a.slug.split('-')[0], 10);
 	  const numB = parseInt(b.slug.split('-')[0], 10);
-	  return numA - numB;
+	  
+	  // If both have numbers at the beginning, sort by number
+	  if (!isNaN(numA) && !isNaN(numB)) {
+	    return numA - numB;
+	  }
+	  
+	  // If only one has a number, numbered files come first
+	  if (!isNaN(numA) && isNaN(numB)) return -1;
+	  if (isNaN(numA) && !isNaN(numB)) return 1;
+	  
+	  // If neither has a number, sort by date (newest first)
+	  const dateA = new Date(a.data.date);
+	  const dateB = new Date(b.data.date);
+	  return dateB - dateA;
 	});
 }
 

@@ -2,6 +2,7 @@
 title: "1 - Intro"
 slug: introduction
 description: "An introduction to my chess engine development series!"
+date: 2025-07-03
 ---
 
 # Chess Engine Development

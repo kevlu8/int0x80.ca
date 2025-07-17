@@ -2,6 +2,7 @@
 title: "GCC Optimization Pragmas Lie to You"
 slug: gcc-optim-pragmas
 description: "GCC optimization pragmas do not behave the same as command-line arguments. Why is this?"
+date: 2024-09-22
 ---
 
 # GCC Optimization Pragmas Lie to You

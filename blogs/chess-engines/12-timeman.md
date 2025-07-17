@@ -2,6 +2,7 @@
 title: "12 - Time Management"
 slug: timeman
 description: "Using time effectively"
+date: 2025-07-05
 ---
 
 # Time Management

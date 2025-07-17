@@ -2,6 +2,7 @@
 title: Judges should know what they judge
 slug: judges-should-know
 description: "People who are judging others' content should know what they are judging."
+date: 2025-07-13
 ---
 
 # Judges should know what they judge

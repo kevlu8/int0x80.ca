@@ -2,6 +2,7 @@
 title: "8 - Principal Variation Search"
 slug: pvs
 description: "Relying more on the first move"
+date: 2025-07-04
 ---
 
 # PV-Search

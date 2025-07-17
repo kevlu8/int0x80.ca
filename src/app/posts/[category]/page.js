@@ -18,7 +18,10 @@ export default async function CategoryPage({ params }) {
           <li key={slug}>
             <Link href={`/posts/${awaitparams.category}/${slug}`}>
 				<div className="border border-gray-700 rounded-lg p-6 hover:bg-gray-900 transition-colors cursor-pointer">
-					<h2 className="text-xl mb-3 text-foreground">{data.title}</h2>
+					<h2 className="text-xl mb-2 text-foreground">{data.title}</h2>
+					<p className="text-gray-500">
+						{data.date ? new Date(data.date).toLocaleDateString() : 'No date'}
+					</p>
 					<p className="text-sm text-gray-400 leading-relaxed">
 						{data.description}
 					</p>
