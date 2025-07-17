@@ -22,6 +22,11 @@ export default function AboutHome() {
 					</p>
 				</div>
 			</div>
+			<div className="flex flex-col">
+				<p className="text-gray-400">
+					<strong>Contact:</strong> <a href="mailto:me@int0x80.ca" className="text-blue-400 hover:underline">me@int0x80.ca</a>
+				</p>
+			</div>
 		</div>
 	</div>
   );
