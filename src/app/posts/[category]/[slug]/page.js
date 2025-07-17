@@ -12,6 +12,31 @@ export async function generateStaticParams() {
   return slugs.map(({ category, slug }) => ({ category, slug }));
 }
 
+export async function generateMetadata({ params }) {
+  const awaitparams = await params;
+  const post = getPostBySlug(awaitparams.category, awaitparams.slug);
+  
+  const title = post.data.title || post.slug;
+  const description = post.data.description || 'Read this blog post';
+  
+  return {
+    title: title,
+    description: description,
+    openGraph: {
+      title: title,
+      description: description,
+      type: 'article',
+      url: `https://int0x80.ca/posts/${awaitparams.category}/${awaitparams.slug}`,
+      siteName: 'int0x80.ca',
+    },
+    twitter: {
+      card: 'summary',
+      title: title,
+      description: description,
+    },
+  };
+}
+
 export default async function PostPage({ params }) {
   const awaitparams = await params;
   const post = getPostBySlug(awaitparams.category, awaitparams.slug);
