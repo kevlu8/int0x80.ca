@@ -15,7 +15,18 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: "int0x80.ca",
-  description: "Why are you reading this?",
+  description: "A personal devlog and portfolio site",
+  openGraph: {
+    title: "int0x80.ca",
+    description: "A personal devlog and portfolio site",
+    siteName: "int0x80.ca",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "int0x80.ca",
+    description: "A personal devlog and portfolio site",
+  },
 };
 
 export default function RootLayout({ children }) {
@@ -24,8 +35,6 @@ export default function RootLayout({ children }) {
 	  <head>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossOrigin="anonymous" />
-		<meta property="og:title" content="int0x80.ca" />
-		<meta property="og:description" content="A personal devlog and portfolio site" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}

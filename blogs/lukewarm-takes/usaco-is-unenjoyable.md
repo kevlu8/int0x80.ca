@@ -27,7 +27,7 @@ Each division has only 3 problems per contest, whereas other countries' olympiad
 
 The format of the USACO is very different from almost every other contest - instead of having problems that start easy and get harder, the USACO problems are usually all the same difficulty, based on the division.
 
-## Intended solutions are often too implementation-heavy
+## Too implementation-heavy
 
 After staring at my screen for 3 hours trying to figure out why my solution was getting Wrong Answer, I often find that the intended solution is a very long implementation of a concept that doesn't feel quite elegant or nice. This is especially true for higher divisions, like Gold and Platinum.
 
