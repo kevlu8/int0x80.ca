@@ -8,7 +8,7 @@ date: 2025-07-16
 # Competitive Programming Doesn't Make You a Better Developer
 ### 2025-07-16
 
-Competitive programming is very often used as a benchmark for how qualified a developer is. Many job interviews require candidates to solve algorithmic problems and explain their thought process, and universities often use results on informatics contests to determine whether or not to admit a CS student.
+Competitive programming is very often used as a litmus test for whether or not a developer is qualified. Many job interviews require candidates to solve algorithmic problems and explain their thought process, and universities often use results on informatics contests to determine whether or not to admit a CS student.
 
 While there is some merit to this, competitive programming skill is ultimately a bad indicator of how well a developer will do in real-world large-scale software development, mainly because algorithmic concepts in competitive programming are very rarely used in real-world applications, and since competitive programming often encourages bad practices that would never otherwise be used in production code.
 
