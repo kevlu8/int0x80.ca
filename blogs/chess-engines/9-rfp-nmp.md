@@ -14,7 +14,7 @@ From this point onward, we will be looking at techniques that are lossy, meaning
 
 ## Reverse Futility Pruning
 
-Let's say that we are at a position where we are up +900cp, with 2 more depth to go. Odds are, we aren't going to lose 450cp of advantage per move, so we can safely prune this branch. This is known as *reverse futility pruning*.
+Let's say that we are at a position where we are up +900cp above beta, with 2 more depth to go. Odds are, we aren't going to lose 450cp of advantage per move, so we can safely prune this branch. This is known as *reverse futility pruning*.
 
 However, we need to be careful with this: what if our queen is hanging? Or, what if we're in check? In general, we should not perform RFP at positions where:
 - We are in check
