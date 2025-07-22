@@ -1,5 +1,5 @@
 ---
-title: Razoring
+title: 15 - Razoring
 slug: razoring
 date: 2025-07-22
 description: "An aggressive yet effective pruning technique in chess engines."
