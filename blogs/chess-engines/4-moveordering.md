@@ -131,14 +131,25 @@ LLR: 2.96 (100.4%) (-2.94, 2.94) [0.00, 10.00]
 
 First, we need a function that takes in a list of raw moves and assigns them scores.
 
+In general, the move ranking should look like this:
+1. TT Move (future blog)
+2. Captures and promotions
+3. Quiet moves (killer moves, history heuristic)
+
 ```cpp
 fastvector<std::pair<Move, Value>> assign_values(fastvector<Move> moves, Board& pos, int ply) {
 	fastvector<std::pair<Move, Value>> scored_moves;
+
+	const Value TT_MOVE_BASE = 32000;
+	const Value CAPTURE_BASE = 20000;
+	const Value QUIET_BASE = -10000;
 	for (Move m : moves) {
 		Value score = 0;
 		if (is_capture(m)) {
-			score = MVV_LVA[pos.piece_on(m.to)][pos.piece_on(m.from)] + 10000; // Add an offset for captures
+			score = CAPTURE_BASE;
+			score += MVV_LVA[pos.piece_on(m.to)][pos.piece_on(m.from)];
 		} else {
+			score = QUIET_BASE;
 			if (m == killer[0][ply]) score += 1500;
 			else if (m == killer[1][ply]) score += 1000; // Add a bonus for killer moves
 			score += history[pos.side_to_move()][m.from][m.to]; // Use history heuristic for quiet moves
@@ -148,6 +159,8 @@ fastvector<std::pair<Move, Value>> assign_values(fastvector<Move> moves, Board& 
 	return scored_moves;
 }
 ```
+
+This way, you have a framework you can improve upon in the future without changing too much code.
 
 Then, we can use this function in our alpha-beta search:
 
@@ -165,6 +178,15 @@ Move next_move(fastvector<std::pair<Move, Value>> &moves) {
 	}
 	moves[idx] = { NullMove, -VALUE_INFINITE }; // Remove the best move from the list
 	return best;
+}
+
+...
+
+auto moves = pos.legal_moves();
+auto scored_moves = assign_values(moves, pos, ply);
+Move cur_move = NullMove;
+while ((cur_move = next_move(scored_moves)) != NullMove) {
+	...
 }
 ```
 
