@@ -14,12 +14,6 @@ Essentially, if our static evaluation is very far below alpha, we perform a quie
 
 ```cpp
 if (!pv && !in_check && depth <= 3 && cur_eval + RAZOR_MARGIN * depth < alpha) {
-	/**
-		* Razoring
-		* 
-		* If we are losing by a lot, check w/ qsearch to see if we could possibly improve.
-		* If not, we can prune the search.
-		*/
 	Value razor_score = quiesce(board, alpha, beta, side, ply);
 	if (razor_score < alpha)
 		return razor_score;
