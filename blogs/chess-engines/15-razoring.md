@@ -8,7 +8,9 @@ description: "An aggressive yet effective pruning technique in chess engines."
 # Razoring
 ### 2025-07-22
 
-Razoring is a pruning technique used to skip nodes that probably won't exceed alpha.
+So far, most pruning techniques we've covered are techniques that prune nodes that will likely produce beta cutoffs. What about the other way around - alpha cutoffs?
+
+Naturally, the challenge with pruning for alpha cutoffs is that alpha cutoffs inherently require *all* moves to be searched and *all* moves to fall below alpha - a much stricter condition than beta cutoffs (just one move must exceed beta). However, we can still use a technique called *razoring*.
 
 Essentially, if our static evaluation is very far below alpha, we perform a quiescence search to check if it is possible at all to reach alpha. If not, we can directly skip the node.
 

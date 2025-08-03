@@ -61,17 +61,12 @@ On one hand, it might be wise to choose the entry with a higher depth. Entries w
 
 On the other hand, entries near leaf nodes will probably be hit multiple times, and entries we searched recently will also be hit more often.
 
-For now, we can just use the depth-focused approach, but in the future, we can experiment with more advanced techniques like aging.
+For now, we can just use the always-replace approach, but in the future, we can experiment with more advanced techniques like bucketed TT.
 
 ```cpp
 void TTable::store(uint64_t key, Value eval, uint8_t depth, TTFlag flag, Move best_move, uint8_t age) {
 	TTEntry *entry = TT + (key % TT_SIZE);
 	if (entry->flags == INVALID) tsize++;
-	if (entry->key != key || entry->depth > depth) {
-		// This entry contains more information than the new one
-		// So we don't overwrite it
-		return;
-	}
 	entry->key = key;
 	entry->eval = eval;
 	entry->depth = depth;
