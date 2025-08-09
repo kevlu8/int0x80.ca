@@ -64,3 +64,30 @@ Games | N: 1212 W: 363 L: 212 D: 637
 Penta | [22, 94, 247, 197, 46]
 ```
 https://sscg13.pythonanywhere.com/test/415/
+
+## PVS SEE
+
+Naturally, the next question to ask is "can we use this in our main search?" And the answer is yes!
+
+However, we need to be a lot more careful with SEE in our main search so as to avoid skipping tactical sacrifices.
+
+A simple example is:
+
+```cpp
+if (depth <= 3 && best > -VALUE_INFINITE) {
+	// Low depth and we have established a best move
+	Value see = board.see(move);
+	if (see < -300) continue; 
+}
+```
+
+You can tune the max SEE depth and the SEE margin as you *see* fit. *See* what I did there? Okay, I'm sorry, I'll stop.
+
+```
+Elo   | 23.99 +- 9.36 (95%)
+SPRT  | 8.0+0.08s Threads=1 Hash=32MB
+LLR   | 2.91 (-2.25, 2.89) [0.00, 5.00]
+Games | N: 1900 W: 536 L: 405 D: 959
+Penta | [22, 178, 432, 283, 35]
+```
+https://sscg13.pythonanywhere.com/test/677/
