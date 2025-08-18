@@ -1,4 +1,7 @@
 @import "tailwindcss";
+@import "chessground/assets/chessground.base.css";
+@import "chessground/assets/chessground.brown.css";
+@import "chessground/assets/chessground.cburnett.css";
 
 :root {
   --background: #0a0a0a;
@@ -83,4 +86,10 @@ article code:not(pre code) {
 
 article pre {
   padding-bottom: 1rem;
+}
+
+/* Custom chess board container */
+.chess-board {
+  width: 400px !important;
+  height: 400px !important;
 }
