@@ -91,3 +91,20 @@ Games | N: 1900 W: 536 L: 405 D: 959
 Penta | [22, 178, 432, 283, 35]
 ```
 https://sscg13.pythonanywhere.com/test/677/
+
+We can take this a step further by having two separate SEE margins for noisy moves and quiet moves.
+
+Generally, we can prune off quiet moves that lose material easier since they are unlikely to actually be good, whereas this isn't as true with captures that lose material.
+
+```cpp
+if (see < (-100 - 100 * noisy) * depth) continue;
+```
+
+```
+Elo   | 5.17 +- 3.75 (95%)
+SPRT  | 8.0+0.08s Threads=1 Hash=32MB
+LLR   | 2.90 (-2.25, 2.89) [0.00, 5.00]
+Games | N: 10560 W: 2521 L: 2364 D: 5675
+Penta | [94, 1212, 2536, 1319, 119]
+```
+https://sscg13.pythonanywhere.com/test/917/

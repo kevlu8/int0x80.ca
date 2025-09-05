@@ -10,7 +10,7 @@ date: 2025-08-26
 
 Recently, OpenAI released their newest model, GPT-5, for the general public.
 
-While many were underwhelmed at the lack of improvement over the GPT-4 models, this decision by OpenAI was ultimately to cut costs. GPT-5 is a far cheaper model, at $1.25 per 1M input tokens compared to GPT-4o, priced at $2.50 per 1M input tokens.
+While many were underwhelmed at the lack of improvement over the GPT-4 models, this decision by OpenAI was ultimately to cut costs. GPT-5 is a far cheaper model, at \$1.25 per 1M input tokens compared to GPT-4o, priced at \$2.50 per 1M input tokens.
 
 Many others, however, were devastated by GPT-5 being a much less agreeable model, often being more "cold" and rational in its responses.
 

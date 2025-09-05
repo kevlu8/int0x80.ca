@@ -26,7 +26,7 @@ Some engines also don't perform RFP at positions where the TT entry is a capture
 ```cpp
 if (!in_check && !pv && !is_possible_mate) {
 	if (eval >= beta + 150 * depth) {
-		return eval - 150 * depth; // Prune the branch
+		return eval; // Prune the branch
 		// Some engines also return values like `(eval + beta) / 2` or so on
 		// Feel free to experiment with this!
 	}
@@ -56,6 +56,7 @@ Note that we need to be careful with this as well: we should not perform null mo
 if (!in_check && !is_pawn_endgame) {
 	board.make_null_move();
 	Value null_score = -negamax(board, depth - 4, -beta, -beta + 1); // Note that we do a zero-window search because we only want to prove that the score is above beta
+	// Feel free to adjust the reduction value BTW, commonly used values include 3 and 4.
 	board.undo_null_move();
 	if (null_score >= beta) {
 		return null_score; // Prune the branch
@@ -73,3 +74,47 @@ Penta | [17, 81, 205, 168, 50]
 https://sscg13.pythonanywhere.com/test/414/
 
 Note that both of these techniques are **not lossless** - rather, they are lossy, and can cause the engine to potentially miss some moves. However, the pros vastly outweigh the cons (as you can see from the elo gains), and they are widely used in modern engines.
+
+## Improvements Upon NMP
+
+There are actually a ton of improvements that one can make on basic null-move pruning. Let's talk about a few:
+
+### Initial check to confirm whether or not NMP will probably pass
+
+Currently, we run NMP no matter what. This can be a bit wasteful since if our static evaluation believes the position is far below alpha, do we really think that it'll somehow shoot up above beta from a null move?
+
+Naturally, we can impose a condition that NMP is only run if the static evaluation is already above beta.
+
+```cpp
+if (!in_check && !is_pawn_endgame && cur_eval >= beta) {
+	...
+}
+```
+
+```
+Elo   | 12.17 +- 6.51 (95%)
+SPRT  | 8.0+0.08s Threads=1 Hash=32MB
+LLR   | 2.89 (-2.25, 2.89) [0.00, 5.00]
+Games | N: 3942 W: 843 L: 705 D: 2394
+Penta | [51, 420, 910, 520, 70]
+```
+https://sscg13.pythonanywhere.com/test/504/
+
+### Adjusting NMP Reduction value based on depth
+
+Currently, we're doing NMP with a reduction of 4 no matter what. But, at higher depths this constant reduction begins to become a bit high. So, we can also factor in the current depth to decide what our NMP reduction value should be.
+
+```cpp
+Value r = 4;
+r += depth / 4;
+Value null_score = -negamax(board, depth - r, ...);
+```
+
+```
+Elo   | 10.24 +- 5.71 (95%)
+SPRT  | 8.0+0.08s Threads=1 Hash=32MB
+LLR   | 2.92 (-2.25, 2.89) [0.00, 5.00]
+Games | N: 4444 W: 1088 L: 957 D: 2399
+Penta | [28, 494, 1070, 579, 51]
+```
+https://sscg13.pythonanywhere.com/test/934/
