@@ -41,6 +41,8 @@ while ((m = next_move(scores)) != NullMove) {
 
 It's important that we specify the score must be below beta. This is because if the score (which is a lower bound) is above beta, we know that there will be a beta cutoff, and we don't need to search the move further.
 
+## Late Move Reductions
+
 In fact, we can actually improve upon this even further. We can limit not only the search window, but also the depth to which we search the move. This is called "late move reductions".
 
 The safest formula is $reduction(i, d) = 0.77 + log(i) \times log(d) / 2.36$, where $i$ is the move index and $d$ is the current depth. There are a number of improvements (e.g. reducing less on captures), but this is a good starting point.
@@ -78,3 +80,41 @@ Ptnml(0-2): [21, 98, 185, 133, 45], WL/DD Ratio: 0.83
 LLR: 2.95 (100.0%) (-2.94, 2.94) [0.00, 10.00]
 --------------------------------------------------
 ```
+
+## Advanced PVSearch
+
+While the preivously provided implementation is the simplest one, there is a better (albeit more complex) one.
+
+```cpp
+Value score;
+if (depth >= 2 && i > 3) {
+	// Case 1: Late Move Reductions
+	Value r = reduction[i][depth];
+	Value searched_depth = depth - r;
+
+	score = -negamax(board, searched_depth, -side, ply+1, -alpha - 1, -alpha);
+	if (score > alpha && searched_depth < newdepth) {
+		score = -negamax(board, newdepth, -side, ply+1, -alpha - 1, -alpha);
+	}
+} else if (!pv || i > 0) {
+	// Case 2: Null-window search but no LMR
+	// Happens in early moves and low depths
+	score = -negamax(board, newdepth, -side, ply+1, -alpha - 1, -alpha);
+}
+if (pv && (i == 0 || score > alpha)) {
+	// Case 3: full-window full-depth search
+	// Only in PV nodes where we either exceeded alpha or are searching the first move
+	score = -negamax(board, newdepth, -side, ply+1, -beta, -alpha);
+}
+```
+
+This implementation is far more complicated and way less intuitive to read, but it does provide a decent strength boost.
+
+```
+Elo   | 10.38 +- 5.82 (95%)
+SPRT  | 8.0+0.08s Threads=1 Hash=32MB
+LLR   | 2.93 (-2.25, 2.89) [0.00, 5.00]
+Games | N: 4554 W: 1145 L: 1009 D: 2400
+Penta | [32, 534, 1038, 612, 61]
+```
+https://sscg13.pythonanywhere.com/test/815/
