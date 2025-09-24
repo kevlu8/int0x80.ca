@@ -12,7 +12,7 @@ Earlier, when we discussed MVV-LVA, we mentioned that one common drawback is tha
 
 To fix this, we can use a technique called *static exchange evaluation* (SEE). This technique allows us to "see" the future exchanges that happen after a capture, and use that information to determine whether the capture is actually good or not.
 
-Implementing a fast SEE algorithm is very complex (and beyond the scope of this post). If you're curious, you can see how I did it in my engine [here](https://github.com/kevlu8/PZChessBot/blob/main/engine/movegen.cpp#L535). For now, I'll just outline a very simple recursive approach.
+Implementing a fast SEE algorithm is very complex (and beyond the scope of this post). If you're curious, you can see how I did it in my engine [here](https://github.com/kevlu8/PZChessBot/blob/main/engine/movegen.cpp#L702). For now, I'll just outline a very simple recursive approach.
 
 ```cpp
 Value see(Board& pos, Square sq) {
@@ -47,9 +47,9 @@ fastvector<std::pair<Move, Value>> assign_values_qs(fastvector<Move> &moves, Boa
 	for (Move m : moves) {
 		if (is_capture(m)) {
 			Value see_val = see_capture(pos, m);
-			if (see_val > 0) {
-				values.push_back({m, MVV_LVA[pos.piece_on(m.to)][pos.piece_on(m.from)] + 10000});
-			}
+			if (see_val < 0)
+				continue;
+			values.push_back({m, MVV_LVA[pos.piece_on(m.to)][pos.piece_on(m.from)] + 10000});
 		}
 	}
 	return values;

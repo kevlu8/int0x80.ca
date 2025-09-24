@@ -20,7 +20,7 @@ I will start out with the very basics of search, eventually explaining more adva
 
 I'm Kevin, a 17-year-old chess enthusiast and programmer. I'm currently writing this blog on my half-broken laptop from a dorm room at UCLA, where I'm attending a summer program (on a topic unrelated to chess though 😅). I've been programming for about 6 years now, exploring a variety of topics (game development, web development, blockchain) and my current fixation is chess programming!
 
-I started my chess engine, PZChessBot, in 2022, back when I was 14 and in middle school. Recently, I picked it back up, and in the past five months, I've made a decent amount of progress. My engine is currently rated around 3300 Elo on the CCRL Blitz list!
+I started my chess engine, PZChessBot, in 2022, back when I was 14 and in middle school. Recently, I picked it back up, and in the past five months, I've made a decent amount of progress. My engine is currently rated around 3300 Elo on the CCRL Blitz list! I've also contributed to Stockfish and Clockwork (collaborative chess engine, shooting for #1 HCE chess engine).
 
 I'm writing this blog to share what I've learned about chess engines, and to help you create your own engine! I'm also in the process of rewriting my engine, so this blog will also serve as a sort of "development diary" for that rewrite. I hope you find it useful!
 
