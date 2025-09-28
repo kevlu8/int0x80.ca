@@ -48,6 +48,27 @@ Penta | [15, 248, 563, 340, 31]
 ```
 https://sscg13.pythonanywhere.com/test/563/
 
+## Improving as a modifier to NMP
+
+We can also do the null-move search more aggressively when we are improving.
+
+```cpp
+if (!pv && !in_check && !is_pawn_endgame && cur_eval >= beta) {
+	Value r = 4 + depth / 4 + std::min((cur_eval - beta) / 200, 3) + improving;
+	...
+```
+
+Pretty simple.
+
+```
+Elo   | 4.80 +- 3.50 (95%)
+SPRT  | 8.0+0.08s Threads=1 Hash=32MB
+LLR   | 2.95 (-2.25, 2.89) [0.00, 5.00]
+Games | N: 11502 W: 2700 L: 2541 D: 6261
+Penta | [95, 1306, 2776, 1493, 81]
+```
+https://sscg13.pythonanywhere.com/test/1078/
+
 ## More Improving
 
 We can also mark the position as improving if the static evaluation is greater than the static evaluation of the position 4 plies ago.

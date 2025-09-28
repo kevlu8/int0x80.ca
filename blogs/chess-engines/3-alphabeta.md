@@ -23,7 +23,7 @@ In practice, this is very easy to implement, requiring only two variables: alpha
 The neat part is that our alpha/beta values are our opponents -beta/-alpha values. So, our search function can pretty much stay the same!
 
 ```cpp
-Value negamax(Board& pos, int depth, Value alpha = -INF, Value beta = INF) {
+Value negamax(Board& pos, int depth, int ply = 0, Value alpha = -INF, Value beta = INF) {
 	if (depth == 0) {
 		// Once we reach the maximum depth, we evaluate
 		return eval(pos);
@@ -32,13 +32,8 @@ Value negamax(Board& pos, int depth, Value alpha = -INF, Value beta = INF) {
 	Value best = -INF; // Start with the worst possible value
 	for (Move m : pos.legal_moves()) {
 		pos.make_move(m); // Make the move on the board
-		Value score = -negamax(pos, depth - 1, -beta, -alpha); // Negate the score for our perspective
+		Value score = -negamax(pos, depth - 1, ply + 1, -beta, -alpha); // Negate the score for our perspective
 		pos.undo_move(m); // Undo the move to restore the board
-
-		if (score >= MATING) score--;
-		if (score <= -MATING) score++; // This is very important!
-		// If we find a checkmate, we want the engine to prefer faster mates.
-		// By subtracting 1 from a winning score, we ensure that the engine prefers mates in fewer moves (or tries to survive as long as possible).
 
 		if (score > best) {
 			best = score; // Update the best score if we found a better one
@@ -52,6 +47,16 @@ Value negamax(Board& pos, int depth, Value alpha = -INF, Value beta = INF) {
 			return best;
 		}
 	}
+
+	if (best == -INF) {
+		// No legal moves, check for checkmate or stalemate
+		if (pos.in_check()) {
+			return -MATE + ply; // Mate in 'ply' moves
+		} else {
+			return 0; // Stalemate
+		}
+	}
+
 	return best; // Return the best score found
 }
 ```
@@ -73,10 +78,10 @@ LLR: 2.96 (100.4%) (-2.94, 2.94) [0.00, 10.00]
 
 There are two ways to implement alpha-beta pruning: fail-hard and fail-soft.
 
-In a fail-hard framework, we will only return values in the range of [alpha, beta]. If we find a better move than beta, we return beta, and if we don't find a move better than alpha, we return alpha. This means that we will never return a value outside of the range [alpha, beta]. Although this is simpler to implement, it is not as efficient as fail-soft.
+In a fail-hard framework, we will only return values in the range of $[\alpha, \beta]$. If we find a better move than beta, we return beta, and if we don't find a move better than alpha, we return alpha. This means that we will never return a value outside of the range $[\alpha, \beta]$. Although this is simpler to implement, it is not as efficient as fail-soft.
 
-In a fail-soft framework, we will return the best move we found, even if it is outside of the range [alpha, beta]. This means that we can return values outside of the range [alpha, beta], but we will still prune the search tree as if we were in a fail-hard framework. The reason this is better is that it gives us more information about how *much* our search failed by.
+In a fail-soft framework, we will return the best move we found, even if it is outside of the range $[\alpha, \beta]$. This means that we can return values outside of the range $[\alpha, \beta]$, but we will still prune the search tree as if we were in a fail-hard framework. The reason this is better is that it gives us more information about how *much* our search failed by.
 
-When we fail outside of the range [alpha, beta], the score we get is actually either a lower or upper bound on the true score. Specifically, if we fail low (no move better than alpha exists), the score we get is an upper bound (the true score is lower than the score we returned). If we fail high (no move worse than beta exists), the score we get is a lower bound (the true score is higher than the score we returned).
+When we fail outside of the range $[\alpha, \beta]$, the score we get is actually either a lower or upper bound on the true score. Specifically, if we fail low (no move better than alpha exists), the score we get is an upper bound (the true score is equal to or lower than the score we returned). If we fail high (no move worse than beta exists), the score we get is a lower bound (the true score is equal to or higher than the score we returned).
 
 Many search optimizations rely on fail highs - specifically, cases where our score exceeds beta. Usually, when we fail high, we gain valuable information about the move we just searched. Essentially, we know that it is a good move, and we can use this information to improve our search and move ordering.

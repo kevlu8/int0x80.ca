@@ -25,13 +25,13 @@ if (cur_eval != -VALUE_INFINITE) {
 	hi = cur_eval + hwindow_sz;
 }
 auto res = negamax(board, depth, board.side == WHITE ? 1 : -1, 0, lo, hi);
-while (!(lo <= res.second && res.second <= hi)) {
+while (!(lo < res.second && res.second < hi)) {
 	// If the result is outside the aspiration window, we need to widen it
 	// Luckily this won't happen when we are at infinite bounds therefore we don't need to handle that
-	if (res.second < lo) {
+	if (res.second <= lo) {
 		// Failed low, expand lower bound
 		lwindow_sz *= 4;
-	} else if (res.second > hi) {
+	} else if (res.second >= hi) {
 		// Failed high, expand upper bound
 		hwindow_sz *= 4;
 	}

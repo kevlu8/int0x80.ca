@@ -14,6 +14,25 @@ We've already talked about the history heuristic in the move ordering blog. But,
 
 When a capture move fails high, we increment its capture history score. It's basically the exact same as the traditional history heuristic, but just a special table for captures, indexed by `[piece][victim][to]`.
 
+Like the traditional history heuristic, we update it on beta cutoffs with the history gravity formula, and decay the histories of all other searched captures.
+
+```cpp
+Value capture_history[6][6][64]; // [piece][victim][to]
+...
+if (score >= beta) {
+	if (m.is_capture()) {
+		const Value bonus = depth * depth;
+		update_capthist(pos.piece_on(m.from), pos.piece_on(m.to), m.to, bonus);
+		for (Move cm : searched_captures) {
+			if (cm != m) {
+				decay_capthist(pos.piece_on(cm.from), pos.piece_on(cm.to), cm.to, -bonus);
+			}
+		}
+	}
+	...
+}
+```
+
 Then, we can use the capture history to replace LVA in our move ordering function:
 
 ```cpp

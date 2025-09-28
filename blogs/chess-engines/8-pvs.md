@@ -16,7 +16,9 @@ Yes, of course!
 
 Optimally, the first move we search should be the best move. Obviously, this isn't always the case, but the first move we search is usually a pretty decent move. So, we can use this to our advantage.
 
-Once we search the first move, we can use the result to set a smaller search window for the next moves. This way, we can search the first move with a larger window, and then search the other moves with a smaller window. If it then turns out that there is a better move, we can re-search the move with the full size window.
+Once we search the first move, we can use the result to set a smaller search window for the next moves. If it then turns out that there is a better move, we can re-search the move with the full size window.
+
+In more fancy terms, for each move after the first, we attempt to *prove* that the move is worse than the current best move by running a null-window search with bounds $(-\alpha - 1, -\alpha)$. If the result is less than or equal to alpha, we know that the move is indeed worse than the current best move, and we can continue on to the next move. However, if the result is greater than alpha, we have to re-search the move with the full window $(-\beta, -\alpha)$ to get an accurate score.
 
 ```cpp
 Move m = NullMove;
@@ -83,7 +85,7 @@ LLR: 2.95 (100.0%) (-2.94, 2.94) [0.00, 10.00]
 
 ## Advanced PVSearch
 
-While the preivously provided implementation is the simplest one, there is a better (albeit more complex) one.
+While the previously provided implementation is the simplest one, there is a better (albeit more complex) one.
 
 ```cpp
 Value score;
@@ -108,7 +110,7 @@ if (pv && (i == 0 || score > alpha)) {
 }
 ```
 
-This implementation is far more complicated and way less intuitive to read, but it does provide a decent strength boost.
+This implementation is far more complicated and way less intuitive to read, but it does provide a decent strength boost. The most notable difference is that we don't do late move reductions on the first few moves or at low depths, and when a reduced search fails, we re-search with full-depth null-window before doing a full-depth full-window search.
 
 ```
 Elo   | 10.38 +- 5.82 (95%)

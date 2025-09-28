@@ -44,6 +44,7 @@ We use a hash table to store the results of previous searches. The key is the ha
 
 ```cpp
 struct TTEntry {
+	uint64_t key; // The hash of the position (necessary to avoid collisions)
 	Value eval; // The score of the position
 	int depth; // The depth at which the score was found
 	Move best_move; // The best move found in this position

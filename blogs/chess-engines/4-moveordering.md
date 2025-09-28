@@ -18,7 +18,7 @@ Also, it's important to note that most engines do not sort all moves at once, bu
 
 The most basic move ordering technique is MVV-LVA, which stands for "Most Valuable Victim - Least Valuable Attacker". This is used for ordering captures, and it works by just calculating the difference in value between the piece being captured and the piece that is capturing it. The higher the difference, the more valuable the move is.
 
-Intuitively, it makes sense - if we can capture a queen with a pawn, it's almost never bad, but if we're capturing a pawn with a queen, it's probably more risky. However, note that this heuristic does not take into account tactical refutations. For example, if we capture a pawn with a queen that results in our queen being captured, it's obviously not a good move. But, this heuristic will still order it as a good move, because the queen is more valuable than the pawn. Fortunately, this heuristic is still very effective in practice.
+Intuitively, it makes sense - if we can capture a queen with a pawn, it's almost never bad, but if we're capturing a pawn with a queen, it's probably more risky. However, note that this heuristic does not take into account tactical refutations. For example, if we capture a pawn with a queen that results in our queen being captured, it's obviously not a good move. But, this heuristic will still order it as a good move, because a capture is being made. Fortunately, this heuristic is still very effective in practice.
 
 Usually, we don't directly subtract the piece values, since generally capturing a piece is better than not performing a capture at all. There are a variety of ways this heuristic can be implemented, but this is how I like to do it.
 
@@ -126,6 +126,8 @@ Ptnml(0-2): [77, 90, 325, 121, 112], WL/DD Ratio: 11.50
 LLR: 2.96 (100.4%) (-2.94, 2.94) [0.00, 10.00]
 --------------------------------------------------
 ```
+
+P.S. Note that most people test the history heuristic in 3 stages: first without history gravity, then with history gravity, and finally with penalizing bad quiet moves.
 
 ## Putting It All Together
 

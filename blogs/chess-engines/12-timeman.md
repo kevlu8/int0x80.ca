@@ -23,9 +23,9 @@ These rules are arguably pretty easy for humans to follow, but for a chess engin
 
 We'll first start with a simple rule: define a formula $f(t, i)$ that takes the time left and the amount of increment we have, and returns how much time we should spend on our move. A simple formula could be:
 
-$$f(t, i) = \frac{1}{25}t + \frac{3}{5}i$$
+$$f(t, i) = \frac{1}{20}t + \frac{3}{5}i$$
 
-Essentially, we assume the game will continue for 25 moves, and we want to spend 1/25 of our time on each move, plus a bit of the increment. This is a very simple formula, but it works well enough as a basic time management system. It basically covers rules 4 and 5 of our list.
+Essentially, we assume the game will continue for 20 moves, and we want to spend 1/20 of our time on each move, plus a bit of the increment. This is a very simple formula, but it works well enough as a basic time management system. It basically covers rules 4 and 5 of our list.
 
 You can get pretty far with this simple formula, but you might quickly notice that sometimes, we waste a bunch of time trying to reach the next depth, but run out of time before finishing that depth. To alleviate this, we can use a "soft limit".
 
@@ -68,12 +68,42 @@ It's the mainline of the Najdorf Sicilian, and white has many good moves. Here, 
 So, we can use this to our advantage and adjust the soft limit based on this ratio. We focus less on increasing the soft limit past what it was before, but instead focus on decreasing it when the best move is obvious.
 
 ```cpp
-double nratio = nodecnt[cur_move.src()][cur_move.dst()] / (double)nodecnt[0][0]; // fraction of nodes used to search bm
-double lim = std::clamp(1 - nratio * 0.8, 0.1, 0.7); // most nodes on best move -> use less time to search, vice versa
+double nratio = nodecnt[cur_move.src()][cur_move.dst()] / nodes; // fraction of nodes used to search bm
+double lim = 1.5 - nratio; // most nodes on best move -> use less time to search, vice versa
+int maxtime = soft_limit * lim;
 ```
 
-Note that I clamp the limit to prevent it from going too low or too high. You can toy with the values to see what works best for you.
+You can toy with the values to see what works best for you.
 
-### Small PS
+```
+Elo   | 16.34 +- 7.14 (95%)
+SPRT  | 40.0+0.40s Threads=1 Hash=128MB
+LLR   | 2.90 (-2.25, 2.89) [0.00, 5.00]
+Games | N: 2362 W: 544 L: 433 D: 1385
+Penta | [2, 233, 613, 318, 15]
+```
+https://sscg13.pythonanywhere.com/test/1096/
 
-I haven't actually gotten node time management to work well in my engine yet, so I don't have a passing SPRT. I'll update this post once I do though!
+## Complexity Time Management
+
+As mentioned with rule 3, we want to spend more time searching complex positions. We've done this implicitly in our node time management, but we can also do this explicitly.
+
+But, how do we define the complexity of a position? A pretty good measure is the difference between the static evaluation and the search evaluation. If the two evaluations are very different, it means that there is a lot of tactical complexity in the position, and we should spend more time searching it.
+
+```cpp
+if (depth >= 6) {
+	Value complexity = abs(eval - static_eval);
+	double factor = std::clamp(complexity / 200.0, 0.0, 1.0);
+	double lim = 0.3 + 0.4 * factor; // 0.3 to 0.7
+	soft_limit = hard_limit * lim;
+}
+```
+
+```
+Elo   | 8.80 +- 5.15 (95%)
+SPRT  | 8.0+0.08s Threads=1 Hash=32MB
+LLR   | 2.97 (-2.25, 2.89) [0.00, 5.00]
+Games | N: 5372 W: 1286 L: 1150 D: 2936
+Penta | [33, 617, 1258, 737, 41]
+```
+https://sscg13.pythonanywhere.com/test/1023/

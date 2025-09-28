@@ -35,15 +35,17 @@ https://sscg13.pythonanywhere.com/test/430/
 
 Okay, I know, the title of the post is "extensions", but this is a very useful technique that I wanted to include here. In general, the current meta is to focus less on extensions, but rather on reductions. Internal iterative reductions are a simple way to do this.
 
-When we reach a position, we either have a transposition table entry or we don't. If we don't, we assume that the position isn't a good position, and we reduce the depth.
+When we reach a position, we either have a transposition table move or we don't. If we don't, we assume that the position isn't a good position, and we reduce the depth.
 
 ```cpp
-if (depth > 5 && !tt_entry) {
-	depth -= 2;
+if (pv && depth >= 5 && (!ttentry || ttentry->move == NullMove)) {
+	depth--;
 }
 ```
 
-Again, the provided numbers are completely arbitrary, and you can adjust them to your liking. The idea is that if we don't have a transposition table entry, the position is likely not very good, so we can reduce the depth.
+Again, the provided numbers are completely arbitrary, and you can adjust them to your liking.
+
+More complicated implementations also do IIR at expected cut-nodes, but this is a good start.
 
 ## Singular Extensions
 
@@ -62,6 +64,8 @@ struct SSEntry {
 Then, when we are in the move loop, we run a singular extension check.
 
 ```cpp
+if (move == line[ply].excl) continue; // skip the excluded move
+...
 if (line[ply].excl == NullMove // do not try extending if we are currently in an extension search
 	&& depth >= 8 // don't extend at low depths, not worth
 	&& ttentry // we have a transposition table entry to base our extension on
@@ -81,7 +85,9 @@ if (line[ply].excl == NullMove // do not try extending if we are currently in an
 }
 ```
 
-Unfortunately, this isn't it - we also need to do some more adjustments. Most importantly, we cannot store singular search results in the transposition table (since they may not reflect the actual position), and we also cannot use TT cutoffs for singular searches (because they include the singular move).
+Unfortunately, this isn't it - we also need to do some more adjustments.
+
+In a singular search, we cannot do non-sound pruning (i.e. RFP, NMP, etc), and we also cannot do TT cutoffs. So, we need to make sure all these pruning heuristics are disabled.
 
 If you can implement all this, you will get a modest but real Elo gain!
 

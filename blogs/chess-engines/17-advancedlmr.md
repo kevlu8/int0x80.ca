@@ -61,3 +61,21 @@ Games | N: 2680 W: 685 L: 560 D: 1435
 Penta | [14, 279, 645, 372, 30]
 ```
 https://sscg13.pythonanywhere.com/test/1052/
+
+## Quantized LMR
+
+We can make our reductions more fine-grained by treating them as floating point numbers, and rounding them at the end.
+
+Obviously, we shouldn't directly use floats (because they're slow and error-prone), so we can instead say that a reduction of 1 ply is 1024 units.
+
+This allows us to be more precise with our reductions, especially when performing SPSA tuning.
+
+```cpp
+Value r = reduction[i][depth]; // in 1024 units
+r -= (node_type == PV_NODE) * 1024;
+r += (node_type == CUT_NODE) * 1024;
+if (moves[i] == killer[0][ply] || moves[i] == killer[1][ply]) r -= 1024;
+...
+Value searched_depth = depth - r / 1024;
+...
+```

@@ -17,14 +17,14 @@ From this point onward, we will be looking at techniques that are lossy, meaning
 Let's say that we are at a position where we are up +900cp above beta, with 2 more depth to go. Odds are, we aren't going to lose 450cp of advantage per move, so we can safely prune this branch. This is known as *reverse futility pruning*.
 
 However, we need to be careful with this: what if our queen is hanging? Or, what if we're in check? In general, we should not perform RFP at positions where:
-- We are in check
-- The node is a PV node (i.e. a node that's part of the best move line)
-- We are in a position near a mate (because RFP can lead to missing mates), we can check this by checking if either alpha or beta is near a mate value
+- We are in check - the position is unstable
+- The node is a PV node - we need to be very careful with these nodes
+- We are at a very high depth - aggressive pruning at high depths can be very dangerous
 
 Some engines also don't perform RFP at positions where the TT entry is a capture or promotion, but this is not strictly necessary (I've found that it loses elo in my engine).
 
 ```cpp
-if (!in_check && !pv && !is_possible_mate) {
+if (!in_check && !pv && depth <= 8) {
 	if (eval >= beta + 150 * depth) {
 		return eval; // Prune the branch
 		// Some engines also return values like `(eval + beta) / 2` or so on
@@ -46,14 +46,15 @@ https://sscg13.pythonanywhere.com/test/413/
 
 First off, we need to talk more about the null move observation. We briefly touched on this when talking about stand pat, but we can actually use this to prune branches in our main search!
 
-Again, the null move observation states that in general, choosing to skip our turn is never as good as playing the best move. So, if we skip our turn, perform a reduced-depth search, and find that the score is still above beta, we can prune the branch.
+Again, the null move observation states that in general, choosing to skip our turn is almost never as good as playing the best move. So, if we skip our turn, perform a reduced-depth search, and find that the score is still above beta, we can prune the branch.
 
 Note that we need to be careful with this as well: we should not perform null move pruning at positions where:
 - We are in check (obviously)
+- The node is a PV node (again, we need to be careful with these nodes)
 - We are in a pawn endgame (i.e. only pawns left where Zugzwangs are common)
 
 ```cpp
-if (!in_check && !is_pawn_endgame) {
+if (!pv && !in_check && !is_pawn_endgame) {
 	board.make_null_move();
 	Value null_score = -negamax(board, depth - 4, -beta, -beta + 1); // Note that we do a zero-window search because we only want to prove that the score is above beta
 	// Feel free to adjust the reduction value BTW, commonly used values include 3 and 4.
@@ -73,7 +74,7 @@ Penta | [17, 81, 205, 168, 50]
 ```
 https://sscg13.pythonanywhere.com/test/414/
 
-Note that both of these techniques are **not lossless** - rather, they are lossy, and can cause the engine to potentially miss some moves. However, the pros vastly outweigh the cons (as you can see from the elo gains), and they are widely used in modern engines.
+Note that both of these techniques are **not lossless** - rather, they are lossy, and can cause the engine to potentially miss some moves. However, the pros vastly outweigh the cons (as you can see from the Elo gains), and they are widely used in modern engines.
 
 ## Improvements Upon NMP
 
@@ -118,3 +119,23 @@ Games | N: 4444 W: 1088 L: 957 D: 2399
 Penta | [28, 494, 1070, 579, 51]
 ```
 https://sscg13.pythonanywhere.com/test/934/
+
+### Adjusting NMP Reduction value based on eval
+
+If our static evaluation is very high above beta, we can risk using a higher reduction value.
+
+```cpp
+Value r = 4;
+r += depth / 4;
+r += std::min((cur_eval - beta) / 200, 3); // Cap the eval-based reduction to 3
+Value null_score = -negamax(board, depth - r, ...);
+```
+
+```
+Elo   | 5.45 +- 3.83 (95%)
+SPRT  | 8.0+0.08s Threads=1 Hash=32MB
+LLR   | 2.98 (-2.25, 2.89) [0.00, 5.00]
+Games | N: 10070 W: 2366 L: 2208 D: 5496
+Penta | [82, 1186, 2355, 1316, 96]
+```
+https://sscg13.pythonanywhere.com/test/947/

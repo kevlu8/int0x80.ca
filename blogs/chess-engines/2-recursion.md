@@ -51,7 +51,7 @@ This is where recursion comes in. We search down the tree, making optimal choice
 Negamax is actually a modification upon the minimax algorithm, which is a well-known algorithm in game theory. But, while minimax has a min-player (who wants to minimize the score) and a max-player (who wants to maximize the score), negamax only has one player who wants to maximize their score. We simply negate the scores of the child nodes to get the scores for the parent node, because if one side is winning, the other side is losing.
 
 ```cpp
-Value negamax(Board& pos, int depth, int side = 1) {
+Value negamax(Board& pos, int depth, int side = 1, int ply = 0) {
 	if (depth == 0) {
 		// Once we reach the maximum depth, we evaluate
 		return eval(pos) * side;
@@ -60,19 +60,23 @@ Value negamax(Board& pos, int depth, int side = 1) {
 	Value best = -INF; // Start with the worst possible value
 	for (Move m : pos.legal_moves()) {
 		pos.make_move(m); // Make the move on the board
-		Value score = -negamax(pos, depth - 1, -side); // Negate the score for our perspective
+		Value score = -negamax(pos, depth - 1, -side, ply + 1); // Negate the score for our perspective
 		pos.undo_move(m); // Undo the move to restore the board
-
-		if (score >= MATING) score--;
-		if (score <= -MATING) score++; // This is very important!
-		// If we find a checkmate, we want the engine to prefer faster mates.
-		// By subtracting 1 from a winning score, we ensure that the engine prefers mates in fewer moves (or tries to survive as long as possible).
-		// The MATING constant is usually set to MATE - MAX_DEPTH, where MATE is a large constant like 30000.
 
 		if (score > best) {
 			best = score; // Update the best score if we found a better one
 		}
 	}
+
+	if (best == -INF) {
+		// No legal moves, check for checkmate or stalemate
+		if (pos.in_check()) {
+			return -MATE + ply; // Mate in 'ply' moves
+		} else {
+			return 0; // Stalemate
+		}
+	}
+
 	return best; // Return the best score found
 }
 ```
@@ -97,8 +101,6 @@ std::pair<Move, Value> search(Board &board, int64_t time) {
 	stop_search = false;
 
 	for (int depth = 1; depth <= MAX_PLY; depth++) {
-		nodes = 0;
-		
 		auto res = negamax(board, depth, board.side == WHITE ? 1 : -1);
 		Move best_move = res.first;
 		Value best = res.second;

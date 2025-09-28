@@ -69,6 +69,8 @@ Stand pat? Isn't that from poker? Yes, it is! But, it also applies to chess engi
 
 The stand pat score is the evaluation of the current position. In theory, not playing a move in almost any given position is worse than playing the best move. So, our stand pat score is basically a lower bound on the score that we can achieve.
 
+Another way of thinking of it is that if we're already satisfied with our position (i.e. `stand_pat >= beta`), we don't need to keep playing captures and can just stop.
+
 So, our new quiescence search function looks like this:
 
 ```cpp
@@ -95,7 +97,7 @@ Value quiescence(Board& pos, int side, Value alpha = -INF, Value beta = INF) {
 				}
 			}
 			if (score >= beta) {
-				return stand_pat; // Beta cutoff
+				return score; // Beta cutoff
 			}
 		}
 	}
