@@ -56,7 +56,7 @@ export function getPostsByCategory(category) {
   
   const files = fs.readdirSync(categoryPath);
   return files
-	.filter(file => file.endsWith('.md'))
+	.filter(file => file.endsWith('.md') && !file.startsWith('.'))
 	.map(file => {
 	  const slug = file.replace(/\.md$/, '');
 	  const { data } = getPostBySlug(category, slug);
