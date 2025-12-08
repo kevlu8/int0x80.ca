@@ -28,9 +28,7 @@ Once we have this, we can create a corrhist table indexed by `[side][pawn_hash]`
 // Size of corrhist table, will be used for all other corrhist types as well
 // Try not to overdo the value here, as corrhist tables can get quite large
 #define CORRHIST_SZ 32768
-#define CORRHIST_GRAIN 256
-#define CORRHIST_WEIGHT 256
-// The other two constants are used for the update formula
+#define MAX_CORRHIST 1024
 
 Value corrhist_pawn[2][CORRHIST_SZ];
 ```
@@ -38,13 +36,10 @@ Value corrhist_pawn[2][CORRHIST_SZ];
 To update corrhist, we can use the *moving exponential average* formula:
 
 ```cpp
-void update_corrhist(Board &board, Value diff, int depth) {
-	const int scaled_diff = diff * CORRHIST_GRAIN;
-	const Value weight = std::min(1 + depth, 16); // Limit weight to 16 for stability
-
+void update_corrhist(Board &board, int bonus) {
 	auto update_entry = [=](Value &entry) {
-		int update = entry * (CORRHIST_WEIGHT - weight) + scaled_diff * weight;
-		entry = std::clamp(update / CORRHIST_WEIGHT, (Value)(-MAX_HISTORY), MAX_HISTORY);
+		int update = std::clamp(bonus, -MAX_CORRHIST / 4, MAX_CORRHIST / 4);
+		entry += update - entry * abs(update) / MAX_CORRHIST;
 	};
 
 	update_entry(corrhist_pawn[board.side][board.pawn_hash() % CORRHIST_SZ]);
@@ -55,17 +50,17 @@ We can call this function at the end of our search, passing in the difference be
 
 ```cpp
 if (!in_check && !bestMove.is_capture() && !bestMove.is_promo()
-	&& !(score < alpha && score >= raw_eval) && !(score > beta && score <= raw_eval)
+	&& !(flag == UPPER_BOUND && score >= corrected_eval) && !(flag == LOWER_BOUND && score <= corrected_eval)
 	&& abs(score) < SCORE_MATE_MAX_PLY) {
-	update_corrhist(board, score - raw_eval, depth);
+	update_corrhist(board, score - corrected_eval, depth);
 }
 ```
 
 Let's go through each of these conditions to understand why they are necessary:
 - `!in_check`: We don't want to update corrhist when in check, because static evaluation in these positions is often very inaccurate.
 - `!bestMove.is_capture() && !bestMove.is_promo()`: Captures and promotions can drastically change the evaluation, so we avoid updating corrhist for these moves.
-- `!(score < alpha && score >= raw_eval)`: if our score fails low, we know that the true score is below it. If the static eval is below that score, we don't know if the true score is actually lower than the static eval, so we skip updating.
-- `!(score > beta && score <= raw_eval)`: similar to the previous condition, but for fail-highs.
+- `!(flag == UPPER_BOUND && score >= corrected_eval)`: if our score fails low, we know that the true score is below it. If the static eval is below that score, we don't know if the true score is actually lower than the static eval, so we skip updating.
+- `!(flag == LOWER_BOUND && score <= corrected_eval)`: similar to the previous condition, but for fail-highs.
 - `abs(score) < SCORE_MATE_MAX_PLY`: We don't want to update corrhist for mate scores, since they are not really comparable to static evals
 
 Then, we can use corrhist when we're taking the static evaluation of a position:
@@ -73,16 +68,15 @@ Then, we can use corrhist when we're taking the static evaluation of a position:
 ```cpp
 Value get_correction(Board &board) {
 	int corr = 0;
+	corr += 128 * corrhist_pawn[board.side][board.pawn_hash() % CORRHIST_SZ];
 
-	corr += corrhist_pawn[board.side][board.pawn_hash() % CORRHIST_SZ];
-
-	return corr / CORRHIST_GRAIN;
+	return corr / 2048;
 }
 
 ...
 
 Value raw_eval = eval(board) * side;
-Value corrected_eval = raw_eval + get_correction(board);
+Value corrected_eval = raw_eval + get_correction(board); // Make sure to do this in both the main search and quiescence search
 ```
 
 And that's it! You've implemented pawn structure correction history.
@@ -96,4 +90,53 @@ Penta | [29, 660, 1525, 780, 34]
 ```
 https://sscg13.pythonanywhere.com/test/1494/
 
-(Do note that my engine really doesn't like corrhist, typical values for corrhist are around 20 Elo)
+(Subsequent bug fix test:)
+
+```
+Elo   | 11.26 +- 6.62 (95%)
+SPRT  | 8.0+0.08s Threads=1 Hash=32MB
+LLR   | 2.89 (-2.25, 2.89) [-5.00, 0.00]
+Games | N: 2932 W: 725 L: 630 D: 1577
+Penta | [12, 310, 729, 401, 14]
+```
+https://sscg13.pythonanywhere.com/test/1686/
+
+## Nonpawn Corrhist
+
+Another easy gainer is using non-pawn hashes. That is, we maintain two hashes for each side, corresponding to the non-pawn pieces they have.
+
+```cpp
+uint64_t np_hash[2] = {};
+```
+
+We then keep track of this hash value through our move making and unmaking.
+
+The corrhist table is extremely simple:
+
+```cpp
+Value nonpawn_corrhist[2][2][CORRHIST_SZ]; // [side to move][color][nonpawn hash of color]
+
+...
+void update_corrhist(Board &board, int bonus) {
+	...
+	update_entry(nonpawn_corrhist[board.side][WHITE][board.nonpawn_hash(WHITE) % CORRHIST_SZ]);
+	update_entry(nonpawn_corrhist[board.side][BLACK][board.nonpawn_hash(BLACK) % CORRHIST_SZ]);
+}
+
+...
+Value get_correction(Board &board) {
+	...
+	corr += 128 * nonpawn_corrhist[board.side][WHITE][board.nonpawn_hash(WHITE) % CORRHIST_SZ];
+	corr += 128 * nonpawn_corrhist[board.side][BLACK][board.nonpawn_hash(BLACK) % CORRHIST_SZ];
+	...
+}
+```
+
+```
+Elo   | 16.56 +- 7.33 (95%)
+SPRT  | 8.0+0.08s Threads=1 Hash=32MB
+LLR   | 2.93 (-2.25, 2.89) [0.00, 5.00]
+Games | N: 2540 W: 636 L: 515 D: 1389
+Penta | [11, 268, 595, 381, 15]
+```
+https://sscg13.pythonanywhere.com/test/1688/
