@@ -67,7 +67,6 @@ For now, we can just use the always-replace approach, but in the future, we can 
 ```cpp
 void TTable::store(uint64_t key, Value eval, uint8_t depth, TTFlag flag, Move best_move, uint8_t age) {
 	TTEntry *entry = TT + (key % TT_SIZE);
-	if (entry->flags == INVALID) tsize++;
 	entry->key = key;
 	entry->eval = eval;
 	entry->depth = depth;
@@ -94,7 +93,7 @@ So, how do we even use the results from the transposition table? It's actually q
 
 ```cpp
 TTable::TTEntry *entry = ttable.probe(zobrist_hash);
-if (entry && entry->depth >= depth) {
+if (!pv && entry && entry->depth >= depth) {
 	// Entry exists and satisfies depth requirement
 	if (entry->flags == EXACT) {
 		return entry->score; // Exact score, we can return it

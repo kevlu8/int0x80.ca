@@ -63,6 +63,8 @@ Value negamax(Board& pos, int depth, int ply = 0, Value alpha = -INF, Value beta
 
 Alpha-beta pruning results in a speedup of around sqrt(N) compared to normal negamax (in the best case). Plus, it's lossless, meaning that it will always find the same best move as normal negamax.
 
+Note: "in the best case" means "with best move ordering". Naturally, if we search the best moves first, we will establish a good "guaranteed score" early on, so we will be able to prune more aggressively.
+
 ```
 --------------------------------------------------
 Results of pz-alphabeta vs pz-negamax (8+0.08, 1t, 16MB, 8moves_v3.pgn):

@@ -36,6 +36,8 @@ As previously mentioned, I won't go too deep into evaluation functions. But, the
 
 You might ask, "Well, if we have this evaluation function, why not just use it to evaluate the position at the root node and be done with it?" Unfortunately, evaluation functions are still estimates at best. There are positions where we might be up 5 queens, but our opponent has a checkmate. In these kinds of positions, our evaluation function would say that we are crushing, but in reality, we are losing. **The more deep we search, the more accurate our evaluation will be, because we make less guesses.**
 
+Note: this doesn't apply if your evaluation is perfect. If this is the case, you have solved chess!
+
 ## Negamax
 
 Let's recap real quick. We have a tree-like structure, and we want to search it efficiently, making educated guesses about which side is more likely to win. Using these guesses, we reach a final verdict of which move is best.
@@ -118,7 +120,7 @@ std::pair<Move, Value> search(Board &board, int64_t time) {
 }
 ```
 
-With a little bit more logic for checkmates and time management, our search, albeit terrible, is able to play moves!
+With a little bit more logic for time management, our search, albeit terrible, is able to play moves!
 
 ```
 Results of stash-8 vs pz-negamax (8+0.08, 1t, 16MB, 8moves_v3.pgn):
@@ -130,4 +132,4 @@ Ptnml(0-2): [0, 1, 11, 20, 18], WL/DD Ratio: 0.83
 
 Tested against an engine with ~1090 ELO, we see that we are around 200 ELO weaker. So, we're approximately at 900 ELO!
 
-However, pure negamax is not very efficient. How can we improve it?
+Unfortunately, pure negamax is not very efficient. How can we improve it?

@@ -23,10 +23,11 @@ if (score >= beta) {
 	if (m.is_capture()) {
 		const Value bonus = depth * depth;
 		update_capthist(pos.piece_on(m.from), pos.piece_on(m.to), m.to, bonus);
-		for (Move cm : searched_captures) {
-			if (cm != m) {
-				decay_capthist(pos.piece_on(cm.from), pos.piece_on(cm.to), cm.to, -bonus);
-			}
+	}
+	for (Move cm : searched_captures) {
+		// Note that we decay captures no matter what, because if the best move were quiet, it suggests that the captures were bad too
+		if (cm != m) {
+			decay_capthist(pos.piece_on(cm.from), pos.piece_on(cm.to), cm.to, -bonus);
 		}
 	}
 	...

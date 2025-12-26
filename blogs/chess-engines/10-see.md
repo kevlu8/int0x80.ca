@@ -77,7 +77,7 @@ A simple example is:
 if (depth <= 3 && best > -VALUE_INFINITE) {
 	// Low depth and we have established a best move
 	Value see = board.see(move);
-	if (see < -300) continue; 
+	if (see < -50 * depth) continue; 
 }
 ```
 
@@ -97,7 +97,7 @@ We can take this a step further by having two separate SEE margins for noisy mov
 Generally, we can prune off quiet moves that lose material easier since they are unlikely to actually be good, whereas this isn't as true with captures that lose material.
 
 ```cpp
-if (see < (-100 - 100 * noisy) * depth) continue;
+if (see < (-50 - 50 * noisy) * depth) continue;
 ```
 
 ```

@@ -56,6 +56,7 @@ We can also do the null-move search more aggressively when we are improving.
 if (!pv && !in_check && !is_pawn_endgame && cur_eval >= beta) {
 	Value r = 4 + depth / 4 + std::min((cur_eval - beta) / 200, 3) + improving;
 	...
+}
 ```
 
 Pretty simple.

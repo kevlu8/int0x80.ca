@@ -25,7 +25,7 @@ Some engines also don't perform RFP at positions where the TT entry is a capture
 
 ```cpp
 if (!in_check && !pv && depth <= 8) {
-	if (eval >= beta + 150 * depth) {
+	if (eval >= beta + 100 * depth) {
 		return eval; // Prune the branch
 		// Some engines also return values like `(eval + beta) / 2` or so on
 		// Feel free to experiment with this!
@@ -59,9 +59,8 @@ if (!pv && !in_check && !is_pawn_endgame) {
 	Value null_score = -negamax(board, depth - 4, -beta, -beta + 1); // Note that we do a zero-window search because we only want to prove that the score is above beta
 	// Feel free to adjust the reduction value BTW, commonly used values include 3 and 4.
 	board.undo_null_move();
-	if (null_score >= beta) {
+	if (null_score >= beta)
 		return null_score; // Prune the branch
-	}
 }
 ```
 
@@ -87,7 +86,7 @@ Currently, we run NMP no matter what. This can be a bit wasteful since if our st
 Naturally, we can impose a condition that NMP is only run if the static evaluation is already above beta.
 
 ```cpp
-if (!in_check && !is_pawn_endgame && cur_eval >= beta) {
+if (!pv && !in_check && !is_pawn_endgame && cur_eval >= beta) {
 	...
 }
 ```
@@ -103,7 +102,7 @@ https://sscg13.pythonanywhere.com/test/504/
 
 ### Adjusting NMP Reduction value based on depth
 
-Currently, we're doing NMP with a reduction of 4 no matter what. But, at higher depths this constant reduction begins to become a bit high. So, we can also factor in the current depth to decide what our NMP reduction value should be.
+Currently, we're doing NMP with a reduction of 4 no matter what. But, at higher depths this constant reduction begins to become a bit low. So, we can also factor in the current depth to decide what our NMP reduction value should be.
 
 ```cpp
 Value r = 4;

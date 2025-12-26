@@ -137,3 +137,27 @@ Penta | [26, 603, 1424, 727, 29]
 https://sscg13.pythonanywhere.com/test/1171/
 
 Also, it is generally known that even plies work better than odd plies (with the exception of 1).
+
+3-ply conthist:
+
+```
+Elo   | 5.31 +- 3.68 (95%)
+SPRT  | 8.0+0.08s Threads=1 Hash=32MB
+LLR   | 3.00 (-2.25, 2.89) [0.00, 5.00]
+Games | N: 9686 W: 2249 L: 2101 D: 5336
+Penta | [44, 1107, 2405, 1231, 56]
+```
+https://sscg13.pythonanywhere.com/test/1522/
+
+4-ply conthist:
+
+```
+Elo   | 10.84 +- 5.68 (95%)
+SPRT  | 40.0+0.40s Threads=1 Hash=128MB
+LLR   | 2.94 (-2.25, 2.89) [0.00, 5.00]
+Games | N: 3846 W: 938 L: 818 D: 2090
+Penta | [6, 424, 951, 528, 14]
+```
+https://sscg13.pythonanywhere.com/test/1535/
+
+(4-ply conthist actually lost Elo at STC)

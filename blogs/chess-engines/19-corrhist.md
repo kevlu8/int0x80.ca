@@ -27,13 +27,13 @@ Once we have this, we can create a corrhist table indexed by `[side][pawn_hash]`
 ```cpp
 // Size of corrhist table, will be used for all other corrhist types as well
 // Try not to overdo the value here, as corrhist tables can get quite large
-#define CORRHIST_SZ 32768
+#define CORRHIST_SZ 16384
 #define MAX_CORRHIST 1024
 
 Value corrhist_pawn[2][CORRHIST_SZ];
 ```
 
-To update corrhist, we can use the *moving exponential average* formula:
+To update corrhist, we can still use the history gravity formula:
 
 ```cpp
 void update_corrhist(Board &board, int bonus) {
@@ -52,7 +52,7 @@ We can call this function at the end of our search, passing in the difference be
 if (!in_check && !bestMove.is_capture() && !bestMove.is_promo()
 	&& !(flag == UPPER_BOUND && score >= corrected_eval) && !(flag == LOWER_BOUND && score <= corrected_eval)
 	&& abs(score) < SCORE_MATE_MAX_PLY) {
-	update_corrhist(board, score - corrected_eval, depth);
+	update_corrhist(board, (score - corrected_eval) * depth / 8);
 }
 ```
 
@@ -140,3 +140,33 @@ Games | N: 2540 W: 636 L: 515 D: 1389
 Penta | [11, 268, 595, 381, 15]
 ```
 https://sscg13.pythonanywhere.com/test/1688/
+
+## Major Corrhist
+
+We can also make a hash key for our major pieces (king, queen, rook) and make a corrhist table for that.
+
+```cpp
+Value major_corrhist[2][CORRHIST_SZ];
+
+...
+void update_corrhist(Board &board, int bonus) {
+	...
+	update_entry(major_corrhist[board.side][board.major_hash() % CORRHIST_SZ]);
+}
+
+...
+Value get_correction(Board &board) {
+	...
+	corr += 128 * major_corrhist[board.side][board.major_hash() % CORRHIST_SZ];
+	...
+}
+```
+
+```
+Elo   | 1.64 +- 1.32 (95%)
+SPRT  | 8.0+0.08s Threads=1 Hash=32MB
+LLR   | 2.93 (-2.25, 2.89) [0.00, 3.00]
+Games | N: 69388 W: 15933 L: 15606 D: 37849
+Penta | [279, 7813, 18177, 8152, 273]
+```
+https://sscg13.pythonanywhere.com/test/1778/
