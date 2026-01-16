@@ -47,52 +47,76 @@ It's important that we specify the score must be below beta. This is because if 
 
 In fact, we can actually improve upon this even further. We can limit not only the search window, but also the depth to which we search the move. This is called "late move reductions".
 
-The safest formula is $reduction(i, d) = 0.77 + log(i) \times log(d) / 2.36$, where $i$ is the move index and $d$ is the current depth. There are a number of improvements (e.g. reducing less on captures), but this is a good starting point.
+To start off simple, we can reduce the depth of the search for moves after the first few moves. For example, we can reduce the depth by 1 ply for moves after the first 3 moves.
 
 ```cpp
-score = -negamax(board, depth - reduction[i][d], -side, ply + 1, -alpha - 1, -alpha);
-if (score > alpha) {
-	// Move wasn't as bad as we thought, do a full search
-	score = -negamax(board, depth - 1, -side, ply + 1, -beta, -alpha);
+Value score;
+if (i > 3) {
+	// Late Move Reductions
+	int r = 2;
+
+	if (capt || promo) r = 1; // No reduction on captures/promotions
+
+	score = -negamax(board, depth - r, -side, ply + 1, -alpha - 1, -alpha);
+	if (score > alpha && r > 1) {
+		// Move wasn't as bad as we thought, do a full search
+		score = -negamax(board, depth - 1, -side, ply + 1, -beta, -alpha);
+	}
+} else {
+	// Regular PVSearch
+	...
 }
 ```
 
-The only pitfall with this is that if the score of a reduced-depth search is `>= beta`, we cannot be sure that the move will actually be a beta cutoff, because we didn't search the move to full depth. You can do some tweaking to see what works best for you!
+This is a very basic implementation of late move reductions, but good enough to already gain Elo. Note that we do not reduce captures or promotions, since these moves can drastically change the evaluation of the position. Also, note that we must remove the `score < beta` condition, since lower-depth fail-highs are not trustworthy.
 
 ```
---------------------------------------------------
-Results of pz-pvs vs pz-aspiration (8+0.08, 1t, 16MB, 8moves_v3.pgn):
-Elo: 139.31 +/- 34.77, nElo: 188.84 +/- 42.23
-LOS: 100.00 %, DrawRatio: 29.23 %, PairsRatio: 6.67
-Games: 260, Wins: 136, Losses: 37, Draws: 87, Points: 179.5 (69.04 %)
-Ptnml(0-2): [3, 9, 38, 46, 34], WL/DD Ratio: 1.38
-LLR: 2.97 (100.9%) (-2.94, 2.94) [0.00, 10.00]
---------------------------------------------------
+Elo   | 22.09 +- 8.80 (95%)
+SPRT  | 8.0+0.08s Threads=1 Hash=32MB
+LLR   | 2.90 (-2.25, 2.89) [0.00, 5.00]
+Games | N: 1984 W: 556 L: 430 D: 998
+Penta | [18, 191, 454, 305, 24]
+```
+https://ob.int0x80.ca/test/81/
+
+We can do even better, however. Since our moves are ordered in approximately best-to-worst, we can reduce later moves even more. A simple formula that takes all this into account is: $reduction(i, d) = 0.77 + log(i) \times log(d) / 2.36$, where $i$ is the move index (1-based) and $d$ is the current depth.
+
+```cpp
+int newdepth = depth - 1;
+int r = reduction[i][depth];
+
+if (capt || promo) r = 0;
+
+score = -negamax(board, newdepth - r, -side, ply + 1, -alpha - 1, -alpha); // Precomputed for speed
+if (score > alpha && r > 1) {
+	// Move wasn't as bad as we thought, do a full search
+	score = -negamax(board, newdepth, -side, ply + 1, -beta, -alpha);
+}
 ```
 
-Removing the `score < beta` condition:
-
 ```
---------------------------------------------------
-Results of pz-no-beta-condition vs pz-pvs (8+0.08, 1t, 16MB, 8moves_v3.pgn):
-Elo: 29.99 +/- 15.61, nElo: 42.36 +/- 21.93
-LOS: 99.99 %, DrawRatio: 38.38 %, PairsRatio: 1.50
-Games: 964, Wins: 307, Losses: 224, Draws: 433, Points: 523.5 (54.30 %)
-Ptnml(0-2): [21, 98, 185, 133, 45], WL/DD Ratio: 0.83
-LLR: 2.95 (100.0%) (-2.94, 2.94) [0.00, 10.00]
---------------------------------------------------
+Elo   | 25.06 +- 9.16 (95%)
+SPRT  | 8.0+0.08s Threads=1 Hash=32MB
+LLR   | 3.02 (-2.25, 2.89) [0.00, 5.00]
+Games | N: 1778 W: 494 L: 366 D: 918
+Penta | [13, 164, 417, 272, 23]
 ```
+https://ob.int0x80.ca/test/84/
 
 ## Advanced PVSearch
 
 While the previously provided implementation is the simplest one, there is a better (albeit more complex) one.
 
 ```cpp
+int newdepth = depth - 1;
 Value score;
 if (depth >= 2 && i > 3) {
 	// Case 1: Late Move Reductions
-	Value r = reduction[i][depth];
-	Value searched_depth = depth - r;
+	int r = reduction[i][depth];
+
+	if (capt || promo) r = 0;
+
+	int searched_depth = newdepth - r;
 
 	score = -negamax(board, searched_depth, -side, ply+1, -alpha - 1, -alpha);
 	if (score > alpha && searched_depth < newdepth) {

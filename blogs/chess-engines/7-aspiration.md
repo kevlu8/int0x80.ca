@@ -17,32 +17,30 @@ However, if our search falls outside of this window, we will have to re-search t
 Customizing the size of the window on which we search will be a common theme in the future! So, make sure that you roughly understand how alpha-beta works.
 
 ```cpp
-Value lo = -VALUE_INFINITE, hi = VALUE_INFINITE;
-int lwindow_sz = ASPIRATION_SIZE, hwindow_sz = ASPIRATION_SIZE; // My aspiration size is set to 50, but feel free to mess around and try different values!
+Value alpha = -VALUE_INFINITE, beta = VALUE_INFINITE;
+Value window_sz = ASPIRATION_SIZE; // My aspiration size is set to 50, but feel free to mess around and try different values!
+Value eval = -VALUE_INFINITE;
+
 if (cur_eval != -VALUE_INFINITE) {
 	// Aspiration windows 
-	lo = cur_eval - lwindow_sz;
-	hi = cur_eval + hwindow_sz;
+	alpha = cur_eval - window_sz;
+	beta = cur_eval + window_sz;
 }
-auto res = negamax(board, depth, board.side == WHITE ? 1 : -1, 0, lo, hi);
-while (!(lo < res.second && res.second < hi)) {
-	// If the result is outside the aspiration window, we need to widen it
-	// Luckily this won't happen when we are at infinite bounds therefore we don't need to handle that
-	if (res.second <= lo) {
+
+while (true) {
+	alpha = std::max(alpha, -VALUE_INFINITE);
+	beta = std::min(beta, VALUE_INFINITE);
+	auto res = negamax(board, depth, board.side == WHITE ? 1 : -1, 0, alpha, beta);
+
+	if (res <= alpha) {
 		// Failed low, expand lower bound
-		lwindow_sz *= 4;
-	} else if (res.second >= hi) {
+		alpha = cur_eval - window_sz * 2;
+	} else if (res >= beta) {
 		// Failed high, expand upper bound
-		hwindow_sz *= 4;
-	}
-	lo = cur_eval - lwindow_sz;
-	hi = cur_eval + hwindow_sz;
-	if (hwindow_sz + lwindow_sz > VALUE_INFINITE / 8) {
-		// If the window is too large, we just use infinite bounds
-		lo = -VALUE_INFINITE;
-		hi = VALUE_INFINITE;
-	}
-	res = negamax(board, depth, board.side == WHITE ? 1 : -1, 0, lo, hi);
+		beta = cur_eval + window_sz * 2;
+	} else break; // Within bounds, done searching
+
+	window_sz *= 2;
 }
 ```
 

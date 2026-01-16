@@ -20,13 +20,13 @@ r -= (node_type == PV_NODE) * 1;
 ```
 
 ```
-Elo   | 11.51 +- 6.10 (95%)
+Elo   | 8.84 +- 5.14 (95%)
 SPRT  | 8.0+0.08s Threads=1 Hash=32MB
-LLR   | 2.90 (-2.25, 2.89) [0.00, 5.00]
-Games | N: 3866 W: 946 L: 818 D: 2102
-Penta | [24, 426, 921, 522, 40]
+LLR   | 2.91 (-2.25, 2.89) [0.00, 5.00]
+Games | N: 4954 W: 1171 L: 1045 D: 2738
+Penta | [16, 557, 1220, 653, 31]
 ```
-https://sscg13.pythonanywhere.com/test/831/
+https://ob.int0x80.ca/test/86/
 
 ## Cutnodes
 
@@ -37,13 +37,13 @@ r += (node_type == CUT_NODE) * 1;
 ```
 
 ```
-Elo   | 4.84 +- 3.57 (95%)
+Elo   | 3.01 +- 2.36 (95%)
 SPRT  | 8.0+0.08s Threads=1 Hash=32MB
-LLR   | 2.93 (-2.25, 2.89) [0.00, 5.00]
-Games | N: 11850 W: 2824 L: 2659 D: 6367
-Penta | [109, 1387, 2792, 1504, 133]
+LLR   | 3.07 (-2.25, 2.89) [0.00, 5.00]
+Games | N: 23458 W: 5393 L: 5190 D: 12875
+Penta | [122, 2731, 5805, 2964, 107]
 ```
-https://sscg13.pythonanywhere.com/test/915/
+https://ob.int0x80.ca/test/88/
 
 ## Killer Moves
 
@@ -61,6 +61,32 @@ Games | N: 2680 W: 685 L: 560 D: 1435
 Penta | [14, 279, 645, 372, 30]
 ```
 https://sscg13.pythonanywhere.com/test/1052/
+
+## Cutoff Count
+
+We can store the amount of (beta) cutoffs at a given ply, and reduce more if the next ply has many cutoffs.
+
+```cpp
+cutoff_cnt[ply+1] = 0;
+...
+// Moveloop {
+	...
+	if (cutoff_cnt[ply+1] > 3) r += 1;
+	...
+	if (score >= beta) {
+		cutoff_cnt[ply]++;
+		...
+	}
+```
+
+```
+Elo   | 4.17 +- 3.16 (95%)
+SPRT  | 8.0+0.08s Threads=1 Hash=32MB
+LLR   | 2.96 (-2.25, 2.89) [0.00, 5.00]
+Games | N: 14082 W: 3411 L: 3242 D: 7429
+Penta | [108, 1633, 3372, 1838, 90]
+```
+https://ob.int0x80.ca/test/104/
 
 ## Quantized LMR
 

@@ -157,16 +157,61 @@ void update_corrhist(Board &board, int bonus) {
 ...
 Value get_correction(Board &board) {
 	...
-	corr += 128 * major_corrhist[board.side][board.major_hash() % CORRHIST_SZ];
+	corr += 64 * major_corrhist[board.side][board.major_hash() % CORRHIST_SZ];
+	...
+}
+```
+
+We typically weigh this corrhist less because major pieces tend to be more dynamic and their value can swing more wildly based on position.
+
+```
+Elo   | 3.73 +- 2.89 (95%)
+SPRT  | 8.0+0.08s Threads=1 Hash=32MB
+LLR   | 2.91 (-2.25, 2.89) [0.00, 5.00]
+Games | N: 15106 W: 3460 L: 3298 D: 8348
+Penta | [53, 1756, 3777, 1910, 57]
+```
+https://sscg13.pythonanywhere.com/test/1823/
+
+## Minor Corrhist
+
+Naturally, we can also make a correction history for minor pieces (king, bishop, knight). Note that the king isn't typically known as a "minor piece", but it appears to gain from this treatment.
+
+```cpp
+Value minor_corrhist[2][CORRHIST_SZ];
+...
+void update_corrhist(Board &board, int bonus) {
+	...
+	update_entry(minor_corrhist[board.side][board.minor_hash() % CORRHIST_SZ]);
+}
+...
+Value get_correction(Board &board) {
+	...
+	corr += 64 * minor_corrhist[board.side][board.minor_hash() % CORRHIST_SZ];
 	...
 }
 ```
 
 ```
-Elo   | 1.64 +- 1.32 (95%)
+Elo   | 2.98 +- 2.40 (95%)
 SPRT  | 8.0+0.08s Threads=1 Hash=32MB
-LLR   | 2.93 (-2.25, 2.89) [0.00, 3.00]
-Games | N: 69388 W: 15933 L: 15606 D: 37849
-Penta | [279, 7813, 18177, 8152, 273]
+LLR   | 2.91 (-2.25, 2.89) [0.00, 5.00]
+Games | N: 21312 W: 4784 L: 4601 D: 11927
+Penta | [76, 2428, 5461, 2619, 72]
 ```
-https://sscg13.pythonanywhere.com/test/1778/
+https://sscg13.pythonanywhere.com/test/1828/
+
+## Continuation Corrhist
+
+Similarly to continuation history, we can also maintain a corrhist table indexed by the past 2 played moves. The only difference is that when evaluating, we don't have a current move so we index by the previous move and the move before that.
+
+I won't show the implementation here because it's relatively simple. It's basically the same as the code from the last post, so just yoink that and modify it slightly.
+
+```
+Elo   | 5.89 +- 3.98 (95%)
+SPRT  | 8.0+0.08s Threads=1 Hash=32MB
+LLR   | 2.90 (-2.25, 2.89) [0.00, 5.00]
+Games | N: 7904 W: 1827 L: 1693 D: 4384
+Penta | [26, 882, 2014, 992, 38]
+```
+https://sscg13.pythonanywhere.com/test/1848/
