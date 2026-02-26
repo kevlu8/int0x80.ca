@@ -16,6 +16,34 @@ However, if our search falls outside of this window, we will have to re-search t
 
 Customizing the size of the window on which we search will be a common theme in the future! So, make sure that you roughly understand how alpha-beta works.
 
+To have a very basic implementation, we can simply take the evaluation of the previous iteration and set our alpha and beta bounds to be a small range around it. If the search fails out of this range, we then search it on full bounds.
+
+```cpp
+Value alpha = -VALUE_INFINITE, beta = VALUE_INFINITE;
+Value window_sz = ASPIRATION_SIZE; // My aspiration size is set to 50, but feel free to mess around and try different values!
+Value eval = -VALUE_INFINITE;
+
+if (cur_eval != -VALUE_INFINITE) {
+	// Aspiration windows 
+	alpha = cur_eval - window_sz;
+	beta = cur_eval + window_sz;
+}
+
+while (true) {
+	alpha = std::max(alpha, -VALUE_INFINITE);
+	beta = std::min(beta, VALUE_INFINITE);
+	auto res = negamax(board, depth, board.side == WHITE ? 1 : -1, 0, alpha, beta);
+
+	if (res <= alpha || res >= beta) {
+		// Failed, expand
+		alpha = -VALUE_INFINITE;
+		beta = VALUE_INFINITE;
+	} else break; // Within bounds, done searching
+}
+```
+
+This is the most basic implementation of aspiration windows and should be enough to gain some Elo. However, we can do even better by expanding the window gradually instead of going straight to full bounds. This way, we can still take advantage of smaller windows even if our evaluation changes only a little bit more than expected.
+
 ```cpp
 Value alpha = -VALUE_INFINITE, beta = VALUE_INFINITE;
 Value window_sz = ASPIRATION_SIZE; // My aspiration size is set to 50, but feel free to mess around and try different values!
@@ -43,8 +71,6 @@ while (true) {
 	window_sz *= 2;
 }
 ```
-
-This way, we can use the results from our previous search to guide our next search, while still being able to handle cases where our evaluation changes significantly.
 
 ```
 --------------------------------------------------
