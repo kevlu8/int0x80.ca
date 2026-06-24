@@ -72,7 +72,7 @@ if (line[ply].excl == NullMove // do not try extending if we are currently in an
 	&& depth >= 8 // don't extend at low depths, not worth
 	&& ttentry // we have a transposition table entry to base our extension on
 	&& move == ttentry->best_move // the move we are searching is the best move in the transposition table
-	&& ttentry->depth >= depth - 2 // the entry is reasonably deep
+	&& ttentry->depth >= depth - 3 // the entry is reasonably deep
 	&& ttentry->flags != UPPER_BOUND // the entry is a reliable score (note that lower bounds work)
 ) {
 	line[ply].excl = move; // set the excluded move
