@@ -18,7 +18,7 @@ export default function AboutHome() {
 					<p className="text-gray-400">
 						I&apos;m an 18-year-old student and developer from Canada, currently studying computer science at UCLA. I&apos;m primarily interested in systems programming, optimization, and usually work with C, C++, and x86 assembly.
 						Most of my recent work has been focused on computer chess. I&apos;m one of the developers of PZChessBot, a top-20 chess engine that competes in events like the Top Chess Engine Championship and the Chess.com Computer Chess Championship.
-						When I'm not working on that, you'll probably find me doing competitive programming, testing CodeForces rounds, or hosting my own contests.
+						When I&apos;m not working on that, you&apos;ll probably find me doing competitive programming, testing CodeForces rounds, or hosting my own contests.
 					</p>
 				</div>
 			</div>
