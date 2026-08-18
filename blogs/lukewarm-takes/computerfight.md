@@ -5,7 +5,7 @@ description: "A 12 year old's exploits to play Roblox"
 date: 2026-08-18
 ---
 
-# My strict parents and my old computer inadvertently taught me a lot
+# I Learned Computers by Fighting With Them
 ### 2026-08-18
 
 From the age of 8, I was fascinated by computers. I played around with VBS and made fork bombs on an old Windows XP laptop the size of my torso. I watched videos on YouTube about malware, and took apart old computers in our basement to see how they worked.
