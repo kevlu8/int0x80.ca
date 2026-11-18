@@ -88,7 +88,7 @@ int r = reduction[i][depth];
 if (capt || promo) r = 0;
 
 score = -negamax(board, newdepth - r, -side, ply + 1, -alpha - 1, -alpha); // Precomputed for speed
-if (score > alpha && r > 1) {
+if (score > alpha && r > 0) {
 	// Move wasn't as bad as we thought, do a full search
 	score = -negamax(board, newdepth, -side, ply + 1, -beta, -alpha);
 }

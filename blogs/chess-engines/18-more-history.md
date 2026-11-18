@@ -17,7 +17,7 @@ First of all, we can make a struct:
 ```cpp
 struct ContHistEntry {
     Value history[2][6][64];
-    ContHistEntry() { memset(history, sizeof(history), 0); }
+    ContHistEntry() { memset(history, 0, sizeof(history)); }
 };
 ```
 

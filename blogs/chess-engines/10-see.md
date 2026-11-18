@@ -20,7 +20,7 @@ Value see(Board& pos, Square sq) {
 	auto [square, piece] = pos.least_valuable_attacker(sq);
 	if (square == NO_SQUARE) return 0; // No attackers, return 0
 	pos.remove_piece(square); // Remove the piece from the board
-	Value val = max(0, PieceValue[piece] - see(pos, square)); // Calculate the value of the exchange
+	Value val = max(0, PieceValue[piece] - see(pos, sq)); // Calculate the value of the exchange
 	pos.add_piece(square, piece); // Add the piece back to the board
 	return val; // Return the value of the exchange
 }

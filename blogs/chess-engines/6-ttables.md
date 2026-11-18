@@ -105,7 +105,7 @@ if (!pv && entry && entry->depth >= depth) {
 }
 ```
 
-This is known as transposition table cutoffs.
+This is known as transposition table cutoffs. Note that mate scores require special handling for storage in the TT, but exact implementation details are not covered here.
 
 ```
 --------------------------------------------------

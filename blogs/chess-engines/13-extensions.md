@@ -89,7 +89,7 @@ if (line[ply].excl == NullMove // do not try extending if we are currently in an
 
 Unfortunately, this isn't it - we also need to do some more adjustments.
 
-In a singular search, we cannot do non-sound pruning (i.e. RFP, NMP, etc), and we also cannot do TT cutoffs. So, we need to make sure all these pruning heuristics are disabled.
+In a singular search, we cannot do non-sound pruning (i.e. RFP, NMP, etc), and we also cannot do TT cutoffs. We should also avoid updating the TT. So, we need to make sure all these pruning heuristics are disabled.
 
 ```
 Elo   | 4.98 +- 3.66 (95%)

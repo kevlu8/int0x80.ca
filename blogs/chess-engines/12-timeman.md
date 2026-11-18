@@ -68,7 +68,7 @@ It's the mainline of the Najdorf Sicilian, and white has many good moves. Here, 
 So, we can use this to our advantage and adjust the soft limit based on this ratio. We focus less on increasing the soft limit past what it was before, but instead focus on decreasing it when the best move is obvious.
 
 ```cpp
-double nratio = nodecnt[cur_move.src()][cur_move.dst()] / nodes; // fraction of nodes used to search bm
+double nratio = nodecnt[cur_move.src()][cur_move.dst()] / (double)nodes; // fraction of nodes used to search bm
 double lim = 1.5 - nratio; // most nodes on best move -> use less time to search, vice versa
 int maxtime = soft_limit * lim;
 ```
