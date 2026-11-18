@@ -37,7 +37,7 @@ Some good SPRT tools include [fastchess](https://github.com/Disservin/fastchess)
 ## A couple of notes
 
 - Do not trust the standard library of the language you are using to be fast. Most of the time, it is not.
-- If using C++, do not use `std::vector` or `std::unordered_map` for anything performance-critical. Use your own data structures (allocated on the heap) instead.
-	- `std::vector`'s automatic resizing is very slow, and appending N elements is not $O(N)$, but rather much slower.
+- If using C++, do not use `std::vector` or `std::unordered_map` for anything performance-critical. Use your own data structures instead.
+	- `std::vector`'s automatic resizing is very slow, and appending N elements can incur many hidden heap allocations.
 	- Don't even get me started on `std::unordered_map`. If you have ever used it on CodeForces, you know the pain of getting hacked post-contest. I actually did a benchmark on it: `std::unordered_map` took 3.31 seconds, while my asm-optimized hash map took 1.05 seconds.
 - If you are using a compiled language, make sure to compile with optimizations **and intrinsics**. For C++, this means using `-O3`, `-flto`, `-march=x86-64-v3` etc. I'd warn against using `-march=native`, especially if you have cutting edge hardware (i.e. supporting AVX-512), since this will cause your code to not run on older hardware that most people have.

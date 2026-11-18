@@ -34,7 +34,7 @@ Chess engines use evaluation functions to solve this problem. Instead of searchi
 
 As previously mentioned, I won't go too deep into evaluation functions. But, they are a crucial part of chess engines. The more accurate the evaluation function, the better the engine will perform. For now, I'll assume you have an evaluation function that is good enough.
 
-You might ask, "Well, if we have this evaluation function, why not just use it to evaluate the position at the root node and be done with it?" Unfortunately, evaluation functions are still estimates at best. There are positions where we might be up 5 queens, but our opponent has a checkmate. In these kinds of positions, our evaluation function would say that we are crushing, but in reality, we are losing. **The more deep we search, the more accurate our evaluation will be, because we make less guesses.**
+You might ask, "Well, if we have this evaluation function, why not just use it to evaluate the position at the root node and be done with it?" Unfortunately, evaluation functions are still estimates at best. There are positions where we might be up 5 queens, but our opponent has a checkmate. In these kinds of positions, our evaluation function would say that we are crushing, but in reality, we are losing. **The more deep we search, the more accurate our evaluation will be, because we can better account for the long-term consequences of our move.**
 
 Note: this doesn't apply if your evaluation is perfect. If this is the case, you have solved chess!
 
